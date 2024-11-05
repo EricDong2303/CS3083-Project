@@ -20,4 +20,14 @@ CREATE TABLE `database_project`.`customer` (
 CREATE TABLE `database_project`.`customer_phone` (
   `email` VARCHAR(100) NOT NULL,
   `phone_number` INT NOT NULL,
-  PRIMARY KEY (`email`, `phone_number`));
+  PRIMARY KEY (`email`, `phone_number`)
+  foreign key(email) references customer(email)
+  );
+
+CREATE TABLE `database_project`.`purchases`(
+    email varchar(100) not null,
+    ticket_id varchar(100) not null,
+    primary key(`email`, `ticket_id`),
+    foreign key(email) references customer(email),
+    foreign key(ticket_id) references ticket(ticket_id)
+);
