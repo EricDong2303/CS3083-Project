@@ -30,3 +30,20 @@ CREATE TABLE `database_project`.`purchases`(
     foreign key(email) references customer(email),
     foreign key(ticket_id) references ticket(ticket_id)
 );
+
+CREATE TABLE `database_project`.`ticket` (
+	ticket_id varchar(100) not null,
+    ticket_price int not null,
+    card_type varchar(100) not null,
+    card_number varchar(100) not null,
+    name_on_card varchar(100) not null,
+    card_exp date not null,
+    purchase_date date not null,
+    purchase_time datetime not null,
+    airline_name varchar(100) not null,
+    flight_number varchar(100) not null,
+    depart_date date not null,
+    depart_time time not null,
+    primary key(ticket_id),
+    foreign key(flight_number, airline_name, depart_date, depart_time) references Flight(flight_number, airline_name, depart_date, depart_time)
+);
