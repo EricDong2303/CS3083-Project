@@ -14,5 +14,10 @@ CREATE TABLE `database_project`.`customer` (
   `passport_country` VARCHAR(100) NOT NULL,
   `dob` DATE NOT NULL,
   `customercol` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`email`));
-);
+  PRIMARY KEY (`email`)
+  );
+
+CREATE TABLE `database_project`.`customer_phone` (
+  `email` VARCHAR(100) NOT NULL,
+  `phone_number` INT NOT NULL,
+  PRIMARY KEY (`email`, `phone_number`));
