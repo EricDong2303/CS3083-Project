@@ -13,7 +13,6 @@ CREATE TABLE `database_project`.`customer` (
   `passport_exp` DATE NOT NULL,
   `passport_country` VARCHAR(100) NOT NULL,
   `dob` DATE NOT NULL,
-  `customercol` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`email`)
   );
 
