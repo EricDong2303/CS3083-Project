@@ -64,7 +64,7 @@ CREATE TABLE `database_project`.`airport` (
 );
 
 CREATE TABLE `database_project`.`airplane` (
-  airline_name VARCHAR(100) NOT NULL,
+  airplane_name VARCHAR(100) NOT NULL,
   id VARCHAR(100) NOT NULL,
   seats INT NOT NULL,
   model_number VARCHAR(100) NOT NULL,
@@ -74,5 +74,25 @@ CREATE TABLE `database_project`.`airplane` (
   maintainance_end DATE NOT NULL,
   foreign key(airline_name) references Airline(airline_name),
   PRIMARY KEY (airline_name)
+);
+
+CREATE TABLE `database_project`.`flight` (
+    flight_name VARCHAR(100) NOT NULL,
+    flight_number VARCHAR(100) NOT NULL,
+    depart_date DATE NOT NULL,
+    depart_time TIME NOT NULL,
+    airplane_name VARCHAR(100) NOT NULL,
+    airplane_id VARCHAR(100) NOT NULL,
+    arrival_time TIME NOT NULL,
+    arrival_date DATE NOT NULL,
+    base_price INT NOT NULL,
+    flight_status VARCHAR(100) NOT NULL CHECK (flight_status IN ('on-time', 'delayed')),
+    departure_airport VARCHAR(100) NOT NULL,
+    arrival_airport VARCHAR(100) NOT NULL,
+    PRIMARY KEY(flight_number, airplane_name, depart_date, depart_time),
+    FOREIGN KEY(airplane_name) REFERENCES Airplane(airplane_name),
+    FOREIGN KEY(airplane_id) REFERENCES Airplane(airplane_id),
+    FOREIGN KEY(departure_airport) REFERENCES Airport(code),
+    FOREIGN KEY(arrival_airport) REFERENCES Airport(code)
 );
 
