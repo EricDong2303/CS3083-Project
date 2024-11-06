@@ -120,3 +120,9 @@ CREATE TABLE `database_project`.`airline_staff` (
     foreign key(airline_name) references Airline(airline_name)
 );
 
+CREATE TABLE `database_project`.`staff_phone` (
+    username varchar(100) not null,
+    phone_number int not null,
+    primary key(username, phone_number),
+    foreign key(username) references Airline_Staff(username)
+);
