@@ -47,3 +47,8 @@ CREATE TABLE `database_project`.`ticket` (
 	primary key(ticket_id),
 	foreign key(flight_number, airline_name, depart_date, depart_time) references Flight(flight_number, airline_name, depart_date, depart_time)
 );
+
+CREATE TABLE `database_project`.`airline` (
+  airline_name VARCHAR(100) NOT NULL,
+  PRIMARY KEY (airline_name)
+);
