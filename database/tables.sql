@@ -96,3 +96,15 @@ CREATE TABLE `database_project`.`flight` (
     FOREIGN KEY(arrival_airport) REFERENCES Airport(code)
 );
 
+CREATE TABLE `database_project`.`review` (
+    email VARCHAR(100) NOT NULL,
+    airline_name VARCHAR(50) NOT NULL,
+    flight_number VARCHAR(50) NOT NULL, 
+    depart_date DATE NOT NULL,
+    depart_time TIME NOT NULL,
+    rate INT NOT NULL CHECK (rate IN (1,2,3,4,5)),
+    comment VARCHAR(200) NOT NULL,
+    PRIMARY KEY (email, airline_name, flight_number, depart_date, depart_time),
+    FOREIGN KEY (email) REFERENCES Customer(email),
+    FOREIGN KEY (flight_number, airline_name, depart_date, depart_time) REFERENCES Flight(flight_number, airline_name, depart_date, depart_time)
+);
