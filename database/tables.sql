@@ -54,12 +54,12 @@ CREATE TABLE `database_project`.`airline` (
 );
 
 CREATE TABLE `database_project`.`airport` (
-  code CHAR NOT NULL,
-  name VARCHAR(100) NULL,
-  city VARCHAR(100) NULL,
-  country VARCHAR(100) NULL,
-  number_of_terminals INT NULL,
-  type VARCHAR(100) NULL,
+  code CHAR(3) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  number_of_terminals INT NOT NULL,
+  type VARCHAR(100) NOT NULL check (type in ('domestic', 'international', 'both')),
   PRIMARY KEY (code)
 );
 
