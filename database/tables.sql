@@ -63,3 +63,16 @@ CREATE TABLE `database_project`.`airport` (
   PRIMARY KEY (code)
 );
 
+CREATE TABLE `database_project`.`airplane` (
+  airline_name VARCHAR(100) NOT NULL,
+  id VARCHAR(100) NOT NULL,
+  seats INT NOT NULL,
+  model_number VARCHAR(100) NOT NULL,
+  manufacture_date DATE NOT NULL,
+  age INT NOT NULL,
+  maintainance_start DATE NOT NULL,
+  maintainance_end DATE NOT NULL,
+  foreign key(airline_name) references Airline(airline_name),
+  PRIMARY KEY (airline_name)
+);
+
