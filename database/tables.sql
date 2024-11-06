@@ -52,3 +52,14 @@ CREATE TABLE `database_project`.`airline` (
   airline_name VARCHAR(100) NOT NULL,
   PRIMARY KEY (airline_name)
 );
+
+CREATE TABLE `database_project`.`airport` (
+  code CHAR NOT NULL,
+  name VARCHAR(100) NULL,
+  city VARCHAR(100) NULL,
+  country VARCHAR(100) NULL,
+  number_of_terminals INT NULL,
+  type VARCHAR(100) NULL,
+  PRIMARY KEY (code)
+);
+
