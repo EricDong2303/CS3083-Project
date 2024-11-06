@@ -126,3 +126,11 @@ CREATE TABLE `database_project`.`staff_phone` (
     primary key(username, phone_number),
     foreign key(username) references Airline_Staff(username)
 );
+
+CREATE TABLE `database_project`.`staff_email` (
+    username varchar(100) not null,
+    email varchar(100) not null,
+    primary key(username, email),
+    foreign key(username) references airline_staff(username)
+);
+
