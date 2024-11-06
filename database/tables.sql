@@ -108,3 +108,15 @@ CREATE TABLE `database_project`.`review` (
     FOREIGN KEY (email) REFERENCES Customer(email),
     FOREIGN KEY (flight_number, airline_name, depart_date, depart_time) REFERENCES Flight(flight_number, airline_name, depart_date, depart_time)
 );
+
+CREATE TABLE `database_project`.`airline_staff` (
+    username varchar(100) not null,
+    staff_password varchar(100) not null,
+    first_name varchar(100) not null,
+    last_name varchar(100) not null,
+    dob date not null,
+    airline_name varchar(100) not null,
+    primary key(username),
+    foreign key(airline_name) references Airline(airline_name)
+);
+
