@@ -28,12 +28,15 @@ VALUES ('james3@gmail.com', 'badpassword', 'James', 'Wang', 43, 'Yes St', '300',
 INSERT INTO customer_phone(email, phone_number) VALUES ('james3@gmail.com', '1111111111');
 
 --d. Insert at least three airplanes.
-
-INSERT INTO `airplane` (airplane_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
+INSERT INTO `airplane` (airline_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
 VALUES ('Jet Blue', 'JB111', 150, 'A320', '2015-05-20', 7, '2023-01-01', '2023-01-15');
 
-INSERT INTO `airplane` (airplane_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
+INSERT INTO `airplane` (airline_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
 VALUES ('Delta', 'DL126', 180, 'B737', '2018-08-10', 5, '2023-06-01', '2023-06-10');
 
-INSERT INTO `airplane` (airplane_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
+INSERT INTO `airplane` (airline_name, id, seats, model_number, manufacture_date, age, maintainance_start, maintainance_end) 
 VALUES ('Alaska Airlines', 'AS190', 100, 'E190', '2012-02-25', 11, '2023-03-01', '2023-03-15');
+
+--e. Insert At least One airline Staff working for Jet Blue
+INSERT INTO airline_staff (username, staff_password, first_name, last_name, dob, airline_name) 
+VALUES ('JaneSmith', 'securepassword', 'Jane', 'Smith', '1985-07-20', 'Jet Blue');
