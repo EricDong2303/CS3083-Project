@@ -64,7 +64,7 @@ CREATE TABLE `database_project`.`airport` (
 );
 
 CREATE TABLE `database_project`.`airplane` (
-  airplane_name VARCHAR(100) NOT NULL,
+  airline_name VARCHAR(100) NOT NULL,
   id VARCHAR(100) NOT NULL,
   seats INT NOT NULL,
   model_number VARCHAR(100) NOT NULL,
