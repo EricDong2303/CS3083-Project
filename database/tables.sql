@@ -1,59 +1,74 @@
-CREATE TABLE `database_project`.`customer` (
-  email VARCHAR(100) NOT NULL,
-  password VARCHAR(100) NOT NULL,
-  first_name VARCHAR(100) NOT NULL,
-  last_name VARCHAR(100) NOT NULL,
-  building_number INT NOT NULL,
-  street_name VARCHAR(100) NOT NULL,
-  apt_number VARCHAR(100) NOT NULL,
-  city VARCHAR(100) NOT NULL,
-  state VARCHAR(100) NOT NULL,
-  zipcode INT NOT NULL,
-  passport_number INT NOT NULL,
-  passport_exp DATE NOT NULL,
-  passport_country VARCHAR(100) NOT NULL,
-  dob DATE NOT NULL,
-  PRIMARY KEY (email)
+CREATE TABLE customer(
+	email VARCHAR(100),
+	password VARCHAR(100) NOT NULL,
+	first_name VARCHAR(100) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	building_number INT NOT NULL,
+	street_name VARCHAR(100) NOT NULL,
+	apartment_name VARCHAR(100) NOT NULL,
+	city VARCHAR(100) NOT NULL,
+	state VARCHAR(100) NOT NULL,
+	zipcode INT NOT NULL,
+	passport_num INT NOT NULL,
+	passport_country VARCHAR(100) NOT NULL,
+	passport_number INT NOT NULL,
+	date_of_birth DATE NOT NULL,
+	PRIMARY KEY(email)
 );
 
-CREATE TABLE `database_project`.`customer_phone` (
-	email VARCHAR(100) NOT NULL,
-	phone_number INT NOT NULL,
-	PRIMARY KEY (email, phone_number)
-	foreign key(email) references customer(email)
+CREATE TABLE customer_phone(
+	phone_number INT,
+	email VARCHAR(100),
+	PRIMARY KEY(phone_number, email),
+	FOREIGN KEY(email) REFERENCES customer(email)
 );
 
-CREATE TABLE `database_project`.`purchases`(
-    email varchar(100) not null,
-    ticket_id varchar(100) not null,
-    primary key(email, ticket_id),
-    foreign key(email) references customer(email),
-    foreign key(ticket_id) references ticket(ticket_id)
+CREATE TABLE purchases(
+	email VARCHAR(100),
+	ticket_id VARCHAR(100),
+	PRIMARY KEY(email, ticket_id),
+	FOREIGN KEY(email) REFERENCES customer(email),
+	FOREIGN KEY(ticket_id) REFERENCES ticket(ticket_id)
 );
 
-CREATE TABLE `database_project`.`ticket` (
-	ticket_id varchar(100) not null,
+CREATE TABLE ticket(
+	ticket_id VARCHAR(100),
+	flight_number INT,
+	arrival_code VARCHAR(100),
+	departure_code VARCHAR(100),
+	ticket_price INT NOT NULL,
+	card_type VARCHAR(100) NOT NULL,
+	card_number INT NOT NULL,
+	name_on_card VARCHAR(100) NOT NULL,
+	purchase_date DATE NOT NULL,
+	purchase_time TIME NOT NULL,
+	PRIMARY KEY(ticket_id, flight_number, arrival_code, departure_code),
+	FOREIGN KEY(flight_number, arrival_code, departure_code) REFERENCES flight(flight_number, arrival_code, departure_code)
+);
+
+CREATE TABLE ticket(
+	ticket_id VARCHAR(100) not null,
 	ticket_price int not null,
-	card_type varchar(100) not null,
-	card_number varchar(100) not null,
-	name_on_card varchar(100) not null,
+	card_type VARCHAR(100) not null,
+	card_number VARCHAR(100) not null,
+	name_on_card VARCHAR(100) not null,
 	card_exp date not null,
 	purchase_date date not null,
 	purchase_time datetime not null,
-	airline_name varchar(100) not null,
-	flight_number varchar(100) not null,
+	airline_name VARCHAR(100) not null,
+	flight_number VARCHAR(100) not null,
 	depart_date date not null,
 	depart_time time not null,
 	primary key(ticket_id),
-	foreign key(flight_number, airline_name, depart_date, depart_time) references Flight(flight_number, airline_name, depart_date, depart_time)
+	FOREIGN KEY(flight_number, airline_name, depart_date, depart_time) REFERENCES Flight(flight_number, airline_name, depart_date, depart_time)
 );
 
-CREATE TABLE `database_project`.`airline` (
+CREATE TABLE airline(
   airline_name VARCHAR(100) NOT NULL,
   PRIMARY KEY (airline_name)
 );
 
-CREATE TABLE `database_project`.`airport` (
+CREATE TABLE airport(
   code CHAR(3) NOT NULL,
   name VARCHAR(100) NOT NULL,
   city VARCHAR(100) NOT NULL,
@@ -63,7 +78,7 @@ CREATE TABLE `database_project`.`airport` (
   PRIMARY KEY (code)
 );
 
-CREATE TABLE `database_project`.`airplane` (
+CREATE TABLE airplane(
   airline_name VARCHAR(100) NOT NULL,
   id VARCHAR(100) NOT NULL,
   seats INT NOT NULL,
@@ -72,11 +87,11 @@ CREATE TABLE `database_project`.`airplane` (
   age INT NOT NULL,
   maintainance_start DATE NOT NULL,
   maintainance_end DATE NOT NULL,
-  foreign key(airline_name) references Airline(airline_name),
+  FOREIGN KEY(airline_name) REFERENCES Airline(airline_name),
   PRIMARY KEY (airline_name)
 );
 
-CREATE TABLE `database_project`.`flight` (
+CREATE TABLE flight(
     flight_name VARCHAR(100) NOT NULL,
     flight_number VARCHAR(100) NOT NULL,
     depart_date DATE NOT NULL,
@@ -96,7 +111,7 @@ CREATE TABLE `database_project`.`flight` (
     FOREIGN KEY(arrival_airport) REFERENCES Airport(code)
 );
 
-CREATE TABLE `database_project`.`review` (
+CREATE TABLE review(
     email VARCHAR(100) NOT NULL,
     airline_name VARCHAR(50) NOT NULL,
     flight_number VARCHAR(50) NOT NULL, 
@@ -109,28 +124,28 @@ CREATE TABLE `database_project`.`review` (
     FOREIGN KEY (flight_number, airline_name, depart_date, depart_time) REFERENCES Flight(flight_number, airline_name, depart_date, depart_time)
 );
 
-CREATE TABLE `database_project`.`airline_staff` (
-    username varchar(100) not null,
-    staff_password varchar(100) not null,
-    first_name varchar(100) not null,
-    last_name varchar(100) not null,
+CREATE TABLE airline_staff(
+    username VARCHAR(100) not null,
+    staff_password VARCHAR(100) not null,
+    first_name VARCHAR(100) not null,
+    last_name VARCHAR(100) not null,
     dob date not null,
-    airline_name varchar(100) not null,
+    airline_name VARCHAR(100) not null,
     primary key(username),
-    foreign key(airline_name) references Airline(airline_name)
+    FOREIGN KEY(airline_name) REFERENCES Airline(airline_name)
 );
 
-CREATE TABLE `database_project`.`staff_phone` (
-    username varchar(100) not null,
+CREATE TABLE staff_phone(
+    username VARCHAR(100) not null,
     phone_number int not null,
     primary key(username, phone_number),
-    foreign key(username) references Airline_Staff(username)
+    FOREIGN KEY(username) REFERENCES Airline_Staff(username)
 );
 
-CREATE TABLE `database_project`.`staff_email` (
-    username varchar(100) not null,
-    email varchar(100) not null,
+CREATE TABLE staff_email(
+    username VARCHAR(100) not null,
+    email VARCHAR(100) not null,
     primary key(username, email),
-    foreign key(username) references airline_staff(username)
+    FOREIGN KEY(username) REFERENCES airline_staff(username)
 );
 
