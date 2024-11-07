@@ -57,3 +57,18 @@ VALUES ('Delta', 'DL123', '2024-03-01', '10:00:00', 'Delta 757', 'DL123', '01:30
 INSERT INTO flight 
 (airline_name, flight_number, depart_date, depart_time, airplane_name, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_airport, arrival_airport) 
 VALUES ('American Airlines', 'AA122', '2024-04-01', '10:00:00', 'AA 737 MAX', 'AA122', '01:30:00', '2024-04-02', 100, 'on-time', 'LGA', 'ORD');
+
+--g. Insert some tickets for corresponding flights and insert some purchase records (customers bought sometickets).
+INSERT INTO ticket
+(ticket_id, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, airline_name, flight_number, depart_date, depart_time) 
+VALUES ('T1', 300, 'VISA', '4111111111111111', 'Jackson Doe', '2025-08-31', '2024-11-01', '2024-11-01 09:30:00', 'Jet Blue', 'JB111', '2024-12-01', '08:00:00');
+
+INSERT INTO ticket
+(ticket_id, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, airline_name, flight_number, depart_date, depart_time) 
+VALUES ('T2', 700, 'MASTERCARD', '5500000000000004', 'Eric Smith', '2026-09-15', '2024-11-02', '2024-11-02 10:00:00', 'Delta', 'DL102', '2024-12-02', '14:00:00');
+
+INSERT INTO purchases (email, ticket_id)
+VALUES ('ed2303@nyu.edu', 'T1');
+
+INSERT INTO purchases (email, ticket_id)
+VALUES ('Janesmith@gmail.com', 'T2');
