@@ -48,7 +48,7 @@ VALUES ('Jet Blue', 'JB111', '2024-12-01', '08:00:00', 'JB111', '11:30:00', '202
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Delta', 'DL126', '2024-02-01', '09:00:00', 'DL126', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
+VALUES ('Jet Blue', 'DL126', '2024-02-01', '09:00:00', 'DL126', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
