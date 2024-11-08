@@ -10,19 +10,19 @@ INSERT INTO airport (code, name, city, country, number_of_terminals, type) VALUE
 
 -- c. Insert at least three customers with appropriate names and other attributes
 INSERT INTO customer 
-(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, dob) 
+(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, date_of_birth) 
 VALUES ('mike123@gmail.com', 'password123', 'Mike', 'Rafone', 1234, 'Main St', '100', 'New York', 'NY', 10001, 123456789, '2028-12-31', 'USA', '1985-06-15');
 
 INSERT INTO customer_phone(email, phone_number) VALUES ('mike123@gmail.com', '123456789');
 
 INSERT INTO customer 
-(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, dob) 
+(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, date_of_birth) 
 VALUES ('jason1@gmail.com', 'goodpassword', 'Jason', 'Jackson', 1, 'Street St', '200', 'New York', 'NY', 10001, 987654321, '2029-12-31', 'USA', '1988-06-15');
 
 INSERT INTO customer_phone(email, phone_number) VALUES ('jason1@gmail.com', '987654321');
 
 INSERT INTO customer 
-(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, dob) 
+(email, password, first_name, last_name, building_number, street_name, apartment_number, city, state, zipcode, passport_number, passport_exp, passport_country, date_of_birth) 
 VALUES ('james3@gmail.com', 'badpassword', 'James', 'Wang', 43, 'Yes St', '300', 'New York', 'NY', 10001, 1111111111, '2026-11-30', 'USA', '1990-07-15');
 
 INSERT INTO customer_phone(email, phone_number) VALUES ('james3@gmail.com', '1111111111');
