@@ -58,7 +58,7 @@ CREATE TABLE flight(
 	airplane_id VARCHAR(100) NOT NULL,
 	departure_date DATE,
 	departure_time TIME,
-	flight_status VARCHAR(100) NOT NULL CHECK (flight_status IN ('delayed', 'on_time', 'canceled'))
+	flight_status VARCHAR(100) NOT NULL CHECK (flight_status IN ('delayed', 'on_time', 'canceled')),
 	arrival_date DATE NOT NULL,
 	arrival_time TIME NOT NULL,
 	base_price INT NOT NULL,
