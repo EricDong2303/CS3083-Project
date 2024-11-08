@@ -49,6 +49,24 @@ CREATE TABLE airplane(
 	FOREIGN KEY(airline_name) REFERENCES airline(name)
 );
 
+CREATE TABLE flight(
+	flight_number INT,
+	airline_name VARCHAR(100),
+	arrival_code VARCHAR(100) NOT NULL,
+	departure_code VARCHAR(100) NOT NULL,
+	airplane_id VARCHAR(100) NOT NULL,
+	departure_date DATE,
+	departure_time TIME,
+	arrival_date DATE NOT NULL,
+	arrival_time TIME NOT NULL,
+	base_price INT NOT NULL,
+	PRIMARY KEY(flight_number, airline_name, departure_date, departure_time),
+	FOREIGN KEY(airline_name) REFERENCES airline(name),
+	FOREIGN KEY(arrival_code) REFERENCES airport(code),
+	FOREIGN KEY(departure_code) REFERENCES airport(code),
+	FOREIGN KEY(airplane_id) REFERENCES airplane(id)
+);
+
 CREATE TABLE ticket(
 	ticket_id VARCHAR(100),
 	flight_number INT NOT NULL,
@@ -87,23 +105,6 @@ CREATE TABLE review(
 	FOREIGN KEY(flight_number, airline_name, departure_date, departure_time) REFERENCES flight(flight_number, airline_name, departure_date, departure_time)
 );
 
-CREATE TABLE flight(
-	flight_number INT,
-	airline_name VARCHAR(100),
-	arrival_code VARCHAR(100) NOT NULL,
-	departure_code VARCHAR(100) NOT NULL,
-	airplane_id VARCHAR(100) NOT NULL,
-	departure_date DATE,
-	departure_time TIME,
-	arrival_date DATE NOT NULL,
-	arrival_time TIME NOT NULL,
-	base_price INT NOT NULL,
-	PRIMARY KEY(flight_number, airline_name, departure_date, departure_time),
-	FOREIGN KEY(airline_name) REFERENCES airline(name),
-	FOREIGN KEY(arrival_code) REFERENCES airport(code),
-	FOREIGN KEY(departure_code) REFERENCES airport(code),
-	FOREIGN KEY(airplane_id) REFERENCES airplane(id)
-);
 
 CREATE TABLE maintenance(
 	id VARCHAR(100),
