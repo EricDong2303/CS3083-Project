@@ -126,7 +126,7 @@ CREATE TABLE airline_staff(
 	FOREIGN KEY(airline_name) REFERENCES airline(name)
 );
 
-CREATE TABLE staff_phone(
+CREATE TABLE staff_email(
 	email VARCHAR(100),
 	username VARCHAR(100),
 	PRIMARY KEY(email, username),
@@ -134,8 +134,8 @@ CREATE TABLE staff_phone(
 );
 
 CREATE TABLE staff_phone(
-	email VARCHAR(100),
 	phone_number INT,
+	username VARCHAR(100),
 	PRIMARY KEY(phone_number, username),
 	FOREIGN KEY(username) REFERENCES airline_staff(username)
 );
