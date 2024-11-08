@@ -67,7 +67,7 @@ CREATE TABLE flight(
 	airline_name VARCHAR(100),
 	arrival_code VARCHAR(100) NOT NULL,
 	departure_code VARCHAR(100) NOT NULL,
-	airplane_id INT NOT NULL,
+	airplane_id VARCHAR(100) NOT NULL,
 	departure_date DATE,
 	departure_time TIME,
 	arrival_date DATE NOT NULL,
