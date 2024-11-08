@@ -44,25 +44,25 @@ VALUES ('JaneSmith', 'securepassword', 'Jane', 'Smith', '1985-07-20', 'Jet Blue'
 --f. Insert several flights with on-time, and delayed statuses.
 INSERT INTO flight 
 (airline_name, flight_number, depart_date, depart_time, airplane_name, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_airport, arrival_airport) 
-VALUES ('Jet Blue', 111, '2024-12-01', '08:00:00', 'JB111', '11:30:00', '2024-12-01', 300, 'on-time', 'JFK', 'PVG');
+VALUES ('Jet Blue', JB111, '2024-12-01', '08:00:00', 'JB111', '11:30:00', '2024-12-01', 300, 'on-time', 'JFK', 'PVG');
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Jet Blue', 123, '2024-02-01', '09:00:00', 'AS190', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
+VALUES ('Jet Blue', JB123, '2024-02-01', '09:00:00', 'AS190', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Jet Blue', 146, '2024-03-01', '10:00:00', 'DL126', '01:30:00', '2024-03-02', 1000, 'delayed', 'PVG', 'JFK');
+VALUES ('Jet Blue', JB146, '2024-03-01', '10:00:00', 'DL126', '01:30:00', '2024-03-02', 1000, 'delayed', 'PVG', 'JFK');
 
 
 --g. Insert some tickets for corresponding flights and insert some purchase records (customers bought sometickets).
 INSERT INTO ticket
 (ticket_id, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, airline_name, flight_number, departure_date, departure_time) 
-VALUES ('T1', 300, 'VISA', '4111111', 'Jackson Doe', '2025-08-31', '2024-11-01', '2024-11-01 09:30:00', 'Jet Blue', '111', '2024-12-01', '08:00:00');
+VALUES ('T1', 300, 'VISA', '4111111', 'Jackson Doe', '2025-08-31', '2024-11-01', '2024-11-01 09:30:00', 'Jet Blue', 'JB111', '2024-12-01', '08:00:00');
 
 INSERT INTO ticket
 (ticket_id, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, airline_name, flight_number, departure_date, departure_time) 
-VALUES ('T2', 700, 'MASTERCARD', '550004', 'Eric Smith', '2026-09-15', '2024-11-02', '2024-11-02 10:00:00', 'Jet Blue', '123', '2024-02-01', '9:00:00');
+VALUES ('T2', 700, 'MASTERCARD', '550004', 'Eric Smith', '2026-09-15', '2024-11-02', '2024-11-02 10:00:00', 'Jet Blue', 'JB123', '2024-02-01', '9:00:00');
 
 INSERT INTO purchase (email, ticket_id)
 VALUES ('jason1@gmail.com', 'T1');
