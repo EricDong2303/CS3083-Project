@@ -43,16 +43,16 @@ VALUES ('JaneSmith', 'securepassword', 'Jane', 'Smith', '1985-07-20', 'Jet Blue'
 
 -- f. Insert several flights with on-time, and delayed statuses.
 INSERT INTO flight 
-(airline_name, flight_number, depart_date, depart_time, airplane_name, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_airport, arrival_airport) 
+(airline_name, flight_number, depart_date, depart_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_airport, arrival_airport) 
 VALUES ('Jet Blue', 'JB111', '2024-12-01', '08:00:00', 'JB111', '11:30:00', '2024-12-01', 300, 'on-time', 'JFK', 'PVG');
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Jet Blue', 'JB123', '2024-02-01', '09:00:00', 'AS190', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
+VALUES ('Jet Blue', 'JB123', '2024-02-01', '09:00:00', 'JB123', '11:30:00', '2024-02-02', 700, 'delayed', 'JFK', 'PVG');
 
 INSERT INTO flight 
 (airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Jet Blue', 'JB146', '2024-03-01', '10:00:00', 'DL126', '01:30:00', '2024-03-02', 1000, 'delayed', 'PVG', 'JFK');
+VALUES ('Jet Blue', 'JB146', '2024-03-01', '10:00:00', 'JB146', '01:30:00', '2024-03-02', 1000, 'delayed', 'PVG', 'JFK');
 
 
 -- g. Insert some tickets for corresponding flights and insert some purchase records (customers bought sometickets).
