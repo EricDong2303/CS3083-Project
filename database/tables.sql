@@ -5,7 +5,7 @@ CREATE TABLE customer(
 	last_name VARCHAR(100) NOT NULL,
 	building_number INT NOT NULL,
 	street_name VARCHAR(100) NOT NULL,
-	apartment_name VARCHAR(100) NOT NULL,
+	apartment_number VARCHAR(100) NOT NULL,
 	city VARCHAR(100) NOT NULL,
 	state VARCHAR(100) NOT NULL,
 	zipcode INT NOT NULL,
