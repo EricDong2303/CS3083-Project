@@ -9,9 +9,9 @@ CREATE TABLE customer(
 	city VARCHAR(100) NOT NULL,
 	state VARCHAR(100) NOT NULL,
 	zipcode INT NOT NULL,
-	passport_num INT NOT NULL,
-	passport_country VARCHAR(100) NOT NULL,
 	passport_number INT NOT NULL,
+	passport_exp DATE NOT NULL,
+	passport_country VARCHAR(100) NOT NULL,
 	date_of_birth DATE NOT NULL,
 	PRIMARY KEY(email)
 );
@@ -53,7 +53,7 @@ CREATE TABLE review(
 	email VARCHAR(100),
 	flight_number INT,
 	airline_name VARCHAR(100),
-	departure_date VARCHAR(100),
+	departure_date DATE,
 	departure_time TIME,
 	rating INT NOT NULL,
 	comment VARCHAR(100) NOT NULL,
