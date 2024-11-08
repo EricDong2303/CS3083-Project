@@ -43,7 +43,7 @@ VALUES ('JaneSmith', 'securepassword', 'Jane', 'Smith', '1985-07-20', 'Jet Blue'
 
 -- f. Insert several flights with on-time, and delayed statuses.
 INSERT INTO flight 
-(airline_name, flight_number, departure_date, depart_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
+(airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
 VALUES ('Jet Blue', 'JB111', '2024-12-01', '08:00:00', 'JB111', '11:30:00', '2024-12-01', 300, 'on_time', 'JFK', 'PVG');
 
 INSERT INTO flight 
