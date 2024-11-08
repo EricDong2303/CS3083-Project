@@ -35,7 +35,7 @@ CREATE TABLE ticket(
 	ticket_id VARCHAR(100),
 	flight_number INT NOT NULL,
 	airline_name VARCHAR(100) NOT NULL,
-	departure_date VARCHAR(100) NOT NULL,
+	departure_date DATE NOT NULL,
 	departure_time TIME NOT NULL,
 	ticket_price INT NOT NULL,
 	card_type VARCHAR(100) NOT NULL,
