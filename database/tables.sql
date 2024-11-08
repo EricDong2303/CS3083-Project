@@ -24,8 +24,8 @@ CREATE TABLE customer_phone(
 );
 
 CREATE TABLE airline(
-  name VARCHAR(100),
-  PRIMARY KEY (name)
+	name VARCHAR(100),
+	PRIMARY KEY (name)
 );
 
 CREATE TABLE airport(
@@ -43,7 +43,7 @@ CREATE TABLE airplane(
 	airline_name VARCHAR(100),
 	seats INT NOT NULL,
 	company VARCHAR(100) NOT NULL,
-    age INT AS (YEAR(CURDATE()) - YEAR(manufacture_date)),
+	age INT AS (YEAR(CURDATE()) - YEAR(manufacture_date)),
 	model_number INT NOT NULL,
 	manufacture_date DATE NOT NULL,
 	PRIMARY KEY(id, airline_name),
@@ -51,17 +51,18 @@ CREATE TABLE airplane(
 );
 
 CREATE TABLE flight(
-	flight_number INT,
+	flight_number VARCHAR(100),
 	airline_name VARCHAR(100),
 	arrival_code VARCHAR(100) NOT NULL,
 	departure_code VARCHAR(100) NOT NULL,
 	airplane_id VARCHAR(100) NOT NULL,
 	departure_date DATE,
 	departure_time TIME,
-    flight_status VARCHAR(100) NOT NULL CHECK (flight_status IN ('delayed', 'on_time', 'canceled'))
+	flight_status VARCHAR(100) NOT NULL CHECK (flight_status IN ('delayed', 'on_time', 'canceled'))
 	arrival_date DATE NOT NULL,
 	arrival_time TIME NOT NULL,
 	base_price INT NOT NULL,
+
 	PRIMARY KEY(flight_number, airline_name, departure_date, departure_time),
 	FOREIGN KEY(airline_name) REFERENCES airline(name),
 	FOREIGN KEY(arrival_code) REFERENCES airport(code),
@@ -71,7 +72,7 @@ CREATE TABLE flight(
 
 CREATE TABLE ticket(
 	ticket_id VARCHAR(100),
-	flight_number INT NOT NULL,
+	flight_number VARCHAR(100) NOT NULL,
 	airline_name VARCHAR(100) NOT NULL,
 	departure_date DATE NOT NULL,
 	departure_time TIME NOT NULL,
@@ -96,7 +97,7 @@ CREATE TABLE purchase(
 
 CREATE TABLE review(
 	email VARCHAR(100),
-	flight_number INT,
+	flight_number VARCHAR(100),
 	airline_name VARCHAR(100),
 	departure_date DATE,
 	departure_time TIME,
