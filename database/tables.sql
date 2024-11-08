@@ -23,12 +23,30 @@ CREATE TABLE customer_phone(
 	FOREIGN KEY(email) REFERENCES customer(email)
 );
 
-CREATE TABLE purchase(
-	email VARCHAR(100),
-	ticket_id VARCHAR(100),
-	PRIMARY KEY(email, ticket_id),
-	FOREIGN KEY(email) REFERENCES customer(email),
-	FOREIGN KEY(ticket_id) REFERENCES ticket(ticket_id)
+CREATE TABLE airline(
+  name VARCHAR(100),
+  PRIMARY KEY (name)
+);
+
+CREATE TABLE airport(
+	code VARCHAR(100),
+	name VARCHAR(100) NOT NULL,
+	city VARCHAR(100) NOT NULL,
+	country VARCHAR(100) NOT NULL,
+	number_of_terminals INT NOT NULL,
+	type VARCHAR(100) NOT NULL check (type in ('domestic', 'international', 'both')),
+	PRIMARY KEY(code)
+);
+
+CREATE TABLE airplane(
+	id VARCHAR(100),
+	airline_name VARCHAR(100),
+	seats INT NOT NULL,
+	company VARCHAR(100) NOT NULL,
+	model_number INT NOT NULL,
+	manufacture_date DATE NOT NULL,
+	PRIMARY KEY(id, airline_name),
+	FOREIGN KEY(airline_name) REFERENCES airline(name)
 );
 
 CREATE TABLE ticket(
@@ -48,6 +66,13 @@ CREATE TABLE ticket(
 	FOREIGN KEY(flight_number, airline_name, departure_date, departure_time) REFERENCES flight(flight_number, airline_name, departure_date, departure_time)
 );
 
+CREATE TABLE purchase(
+	email VARCHAR(100),
+	ticket_id VARCHAR(100),
+	PRIMARY KEY(email, ticket_id),
+	FOREIGN KEY(email) REFERENCES customer(email),
+	FOREIGN KEY(ticket_id) REFERENCES ticket(ticket_id)
+);
 
 CREATE TABLE review(
 	email VARCHAR(100),
@@ -78,32 +103,6 @@ CREATE TABLE flight(
 	FOREIGN KEY(arrival_code) REFERENCES airport(code),
 	FOREIGN KEY(departure_code) REFERENCES airport(code),
 	FOREIGN KEY(airplane_id) REFERENCES airplane(id)
-);
-
-CREATE TABLE airline(
-  name VARCHAR(100),
-  PRIMARY KEY (name)
-);
-
-CREATE TABLE airport(
-	code VARCHAR(100),
-	name VARCHAR(100) NOT NULL,
-	city VARCHAR(100) NOT NULL,
-	country VARCHAR(100) NOT NULL,
-	number_of_terminals INT NOT NULL,
-	type VARCHAR(100) NOT NULL check (type in ('domestic', 'international', 'both')),
-	PRIMARY KEY(code)
-);
-
-CREATE TABLE airplane(
-	id VARCHAR(100),
-	airline_name VARCHAR(100),
-	seats INT NOT NULL,
-	company VARCHAR(100) NOT NULL,
-	model_number INT NOT NULL,
-	manufacture_date DATE NOT NULL,
-	PRIMARY KEY(id, airline_name),
-	FOREIGN KEY(airline_name) REFERENCES airline(name)
 );
 
 CREATE TABLE maintenance(
