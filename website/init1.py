@@ -30,10 +30,16 @@ def loginStaff():
 
 
 # Gotta differentiate for staff and customer as well but need to deal with staff's foreign keys aka airline
-#Define route for register
-@app.route('/register')
-def register():
-	return render_template('register.html')
+#Define route for customer register
+@app.route('/registerCustomer')
+def registerCustomer():
+	return render_template('registerCustomer.html')
+
+#Define route for staff register
+@app.route('/registerStaff')
+def registerStaff():
+	return render_template('registerStaff.html')
+
 
 
 ##################################################################
@@ -98,14 +104,15 @@ def loginAuthStaff():
 		error = 'Invalid airline, username, or password'
 		return render_template('loginStaff.html', error=error)
 
+# Make register for both customers and staff
+# and also just fix what it generally does
 
-#Authenticates the register
-@app.route('/registerAuth', methods=['GET', 'POST'])
-def registerAuth():
+#Authenticates the register for customer
+@app.route('/registerAuthCustomer', methods=['GET', 'POST'])
+def registerAuthCustomer():
 	#grabs information from the forms
 	username = request.form['username']
 	password = request.form['password']
-
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
@@ -126,9 +133,53 @@ def registerAuth():
 		cursor.close()
 		return render_template('index.html')
 
+
+#Authenticates the register for staff
+# This needs some extra logic for if the airline exists or not methinks
+@app.route('/registerAuthStaff', methods=['GET', 'POST'])
+def registerAuthStaff():
+	#grabs information from the forms
+	username = request.form['username']
+	password = request.form['password']
+	#cursor used to send queries
+	cursor = conn.cursor()
+	#executes query
+	query = 'SELECT * FROM user WHERE username = %s'
+	cursor.execute(query, (username))
+	#stores the results in a variable
+	data = cursor.fetchone()
+	#use fetchall() if you are expecting more than 1 data row
+	error = None
+	if(data):
+		#If the previous query returns data, then user exists
+		error = "This user already exists"
+		return render_template('register.html', error = error)
+	else:
+		ins = 'INSERT INTO user VALUES(%s, %s)'
+		cursor.execute(ins, (username, password))
+		conn.commit()
+		cursor.close()
+		return render_template('index.html')
+
+# Might need to change this? Customer uses email but staff uses username
+@app.route('/logout')
+def logout():
+	session.pop('username')
+	return redirect('/')
+
+app.secret_key = 'some key that you will never guess'
+
+#Run the app on localhost port 5000
+debug = True # -> you don't have to restart flask
+#for changes to go through, TURN OFF FOR PRODUCTION
+if __name__ == "__main__":
+	app.run('127.0.0.1', 5000, debug = True)
+
+# Need to revamp stuff from here on down because we aren't doing a blog
+
 @app.route('/home')
 def home():
-    
+
     username = session['username']
     cursor = conn.cursor();
     query = 'SELECT ts, blog_post FROM blog WHERE username = %s ORDER BY ts DESC'
@@ -139,7 +190,6 @@ def home():
     cursor.close()
     return render_template('home.html', username=username, posts=data1)
 
-		
 @app.route('/post', methods=['GET', 'POST'])
 def post():
 	username = session['username']
@@ -150,15 +200,3 @@ def post():
 	conn.commit()
 	cursor.close()
 	return redirect(url_for('home'))
-
-@app.route('/logout')
-def logout():
-	session.pop('username')
-	return redirect('/')
-		
-app.secret_key = 'some key that you will never guess'
-#Run the app on localhost port 5000
-#debug = True -> you don't have to restart flask
-#for changes to go through, TURN OFF FOR PRODUCTION
-if __name__ == "__main__":
-	app.run('127.0.0.1', 5000, debug = True)
