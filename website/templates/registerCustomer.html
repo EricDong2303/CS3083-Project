@@ -1,12 +1,12 @@
 <html>
-<head>
+<h1>
 		Customer Register
-</head>
+</h1>
 <body>
 <form action="/registerAuthCustomer" method="POST">
-	<input type="text" name = "email" placeholder="email" required/> </br>
-	<input type="password" name = "password" placeholder="password" required/></br>
-	<input type="submit" value = Register />
+	<input type="text" name = "email" placeholder="email" required/> </br></br>
+	<input type="password" name = "password" placeholder="password" required/></br></br>
+	<input type="submit" value = Register /></br>
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
 	{% endif %}
