@@ -18,11 +18,18 @@ conn = pymysql.connect(host='localhost',
 def hello():
 	return render_template('index.html')
 
-#Define route for login
-@app.route('/login')
-def login():
-	return render_template('login.html')
+#Define route for customer login
+@app.route('/loginCustomer')
+def loginCustomer():
+	return render_template('loginCustomer.html')
 
+#Define route for staff login
+@app.route('/loginStaff')
+def loginStaff():
+	return render_template('loginStaff.html')
+
+
+# Gotta differentiate for staff and customer as well but need to deal with staff's foreign keys aka airline
 #Define route for register
 @app.route('/register')
 def register():
@@ -42,13 +49,13 @@ def register():
 @app.route('/loginAuthCustomer', methods=['GET', 'POST'])
 def loginAuthCustomer():
 	#grabs information from the forms
-	username = request.form['username']
+	email = request.form['email']
 	password = request.form['password']
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
-	query = 'SELECT * FROM user WHERE username = %s and password = %s'
-	cursor.execute(query, (username, password))
+	query = 'SELECT * FROM customer WHERE email = %s and password = %s'
+	cursor.execute(query, (email, password))
 	#stores the results in a variable
 	data = cursor.fetchone()
 	#use fetchall() if you are expecting more than 1 data row
@@ -57,24 +64,25 @@ def loginAuthCustomer():
 	if(data):
 		#creates a session for the the user
 		#session is a built in
-		session['username'] = username
+		session['email'] = email
 		return redirect(url_for('home'))
 	else:
 		#returns an error message to the html page
-		error = 'Invalid login or username'
-		return render_template('login.html', error=error)
+		error = 'Invalid email or password'
+		return render_template('loginCustomer.html', error=error)
 
 #Authenticates the login FOR STAFF
 @app.route('/loginAuthStaff', methods=['GET', 'POST'])
 def loginAuthStaff():
 	#grabs information from the forms
+	airline_name = request.form['airline_name']
 	username = request.form['username']
 	password = request.form['password']
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
-	query = 'SELECT * FROM user WHERE username = %s and password = %s'
-	cursor.execute(query, (username, password))
+	query = 'SELECT * FROM airline_staff WHERE airline_name = %s and username = %s and password = %s'
+	cursor.execute(query, (airline_name, username, password))
 	#stores the results in a variable
 	data = cursor.fetchone()
 	#use fetchall() if you are expecting more than 1 data row
@@ -87,8 +95,8 @@ def loginAuthStaff():
 		return redirect(url_for('home'))
 	else:
 		#returns an error message to the html page
-		error = 'Invalid login or username'
-		return render_template('login.html', error=error)
+		error = 'Invalid airline, username, or password'
+		return render_template('loginStaff.html', error=error)
 
 
 #Authenticates the register
