@@ -139,8 +139,12 @@ def registerAuthCustomer():
 @app.route('/registerAuthStaff', methods=['GET', 'POST'])
 def registerAuthStaff():
 	#grabs information from the forms
+	airline_name = request.form['airline_name']
 	username = request.form['username']
 	password = request.form['password']
+	first_name = request.form['first_name']
+	last_name = request.form['last_name']
+	date_of_birth = request.form['date_of_birth']
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
@@ -155,8 +159,9 @@ def registerAuthStaff():
 		error = "This user already exists"
 		return render_template('register.html', error = error)
 	else:
-		ins = 'INSERT INTO user VALUES(%s, %s)'
-		cursor.execute(ins, (username, password))
+		ins = '''INSERT INTO user (airline_name, username, password, first_name, last_name, date_of_birth)
+        VALUES (%s, %s, %s, %s, %s, %s)'''
+		cursor.execute(ins, (airline_name, username, password, first_name, last_name, date_of_birth))
 		conn.commit()
 		cursor.close()
 		return render_template('index.html')
