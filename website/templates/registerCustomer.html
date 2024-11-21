@@ -4,8 +4,28 @@
 </h1>
 <body>
 <form action="/registerAuthCustomer" method="POST">
-	<input type="text" name = "email" placeholder="email" required/> </br></br>
-	<input type="password" name = "password" placeholder="password" required/></br></br>
+	<input type="text" name = "email" placeholder="email" required/> </br>
+	<input type="password" name = "password" placeholder="password" required/></br>
+	<input type="text" name="first_name" placeholder="First Name" required /> <br />
+	<input type="text" name="last_name" placeholder="Last Name" required /> <br />
+	<input type="number" name="building_number" placeholder="Building Number" required /> <br />
+	<input type="text" name="street_name" placeholder="Street Name" required /> <br />
+	<input type="text" name="apartment_number" placeholder="Apartment Number" required /> <br />
+	<input type="text" name="city" placeholder="City" required /> <br />
+	<input type="text" name="state" placeholder="State" required /> <br />
+	<input type="number" name="zipcode" placeholder="Zipcode" required /> <br />
+	<input type="number" name="passport_number" placeholder="Passport Number" required /> <br />
+
+    <label for="passport_exp">Passport Expiry Date:</label>
+    <input type="date" id="passport_exp" name="passport_exp" required />
+    <div class="helper-text">Enter the expiry date as shown on your passport.</div>
+
+
+    <input type="text" name="passport_country" placeholder="Passport Country" required /> <br />
+        
+    <label for="date_of_birth">Date of Birth:</label>
+    <input type="date" id="date_of_birth" name="date_of_birth" required /></br>
+
 	<input type="submit" value = Register /></br>
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
