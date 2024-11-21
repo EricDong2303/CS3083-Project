@@ -181,7 +181,12 @@ def registerAuthStaff():
 
 @app.route('/logout')
 def logout():
-    session.pop('username')
+    # Check if 'username' exists in the session
+    if 'username' in session:
+        session.pop('username')
+    # Check if 'email' exists in the session
+    elif 'email' in session:
+        session.pop('email')
     return redirect('/')
 
 
