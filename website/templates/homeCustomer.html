@@ -2,8 +2,30 @@
 <head>
 </head>
 <body>
-<form action="/post" method="POST">
 	<h1>Welcome {{username}}</h1>
+	<h2>Search Flights</h2>
+        <form action="/searchFlights" method="POST" class="search-form">
+            <label for="flight">Flight Type</label>
+            <input type="radio" name="flight_type" value="one-way" onchange='toggleReturn()' checked> One-way
+            <input type="radio" name="flight_type" value="round-trip" onchange='toggleReturn()'> Round-trip
+            <br>
+            <br>
+
+            <label for="source">Source Airport:</label>
+            <input type="text" id="source" name="source" required><br>
+            
+            <label for="destination">Destination Airport:</label>
+            <input type="text" id="destination" name="destination" required><br>
+            
+            <label for="depart_date">Departure Date:</label>
+            <input type="date" id="depart_date" name="departure_date" required><br>
+            
+            <label for="return_date">Return Date (Only For Round-trip):</label>
+            <input type="date" id="return_date" name="return_date"><br>
+            
+            <input type="submit" value="Search Flights">
+        </form>
+<form action="/post" method="POST">
 	<input type="text" name = "blog" placeholder="post" required/> </br>
 	<input type="submit" value = Post />
 </form>

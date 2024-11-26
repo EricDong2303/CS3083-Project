@@ -190,6 +190,10 @@ def logout():
     return redirect('/')
 
 
+@app.route('/searchFlights')
+def searchFlights():
+    pass
+
 app.secret_key = 'some key that you will never guess'
 
 # Run the app on localhost port 5000
