@@ -7,14 +7,26 @@
 
 <body>
 {% if not message %}
-	<a href="/loginCustomer">Customer Login</a>
-		<br>
-	<a href="/loginStaff">Staff Login</a>
-		<br>
-	<a href="/registerCustomer">Customer Register</a>
-		<br>
-	<a href="/registerStaff">Staff Register</a>
-		<br>
+<div>
+	<h2>Customers</h2>
+	<ul>
+		<li><a href="/loginCustomer">Customer Login</a></li>
+		<li><a href="/registerCustomer">Customer Register</a></li>
+	</ul>
+</div>
+<hr>
+<div>
+	<h2>Staff</h2>
+	<ul>
+		<li><a href="/loginStaff">Staff Login</a></li>
+		<li><a href="/registerStaff">Staff Register</a></li>
+	</ul>
+</div>
+<hr>
+<div>
+	<h2>Search Flights Without Logging In</h2>
+	<a href="/searchFlight">Search For Flights</a>
+</div>
 {% endif %}
 
 {% if message %}

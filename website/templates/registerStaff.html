@@ -4,11 +4,12 @@
 </h1>
 <body>
 <form action="/registerAuthStaff" method="POST">
-	<input type="text" name = "airline_name" placeholder="airline" required/> </br></br>
 	<input type="text" name = "username" placeholder="username" required/> </br></br>
+	<input type="text" name = "airline_name" placeholder="airline" required/> </br></br>
 	<input type="password" name = "password" placeholder="password" required/></br></br>
 	<input type="text" name = "first_name" placeholder="first_name" required/></br></br>
 	<input type="text" name = "last_name" placeholder="last_name" required/></br></br>
+	<label for="date_of_birth">Enter Your Date of Birth:</label><br>
 	<input type="date" name="date_of_birth" placeholder="date of birth" required/></br></br>
 	<input type="submit" value = Register />
 	{% if error %}

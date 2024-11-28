@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <p>Showing flights from <strong>{{ source }}</strong> to <strong>{{ destination }}</strong>:</p>
+    
+    {% if flights %}
+        <table>
+            <tr>
+                <th>Flight Number</th>
+                <th>Airline Name</th>
+                <th>Departure Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Date</th>
+                <th>Arrival Time</th>
+                <th>Base Price</th>
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight['flight_number'] }}</td>
+                <td>{{ flight['airline_name'] }}</td>
+                <td>{{ flight['departure_date'] }}</td>
+                <td>{{ flight['departure_time'] }}</td>
+                <td>{{ flight['arrival_date'] }}</td>
+                <td>{{ flight['arrival_time'] }}</td>
+                <td>${{ flight['base_price'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No flights found for your search criteria.</p>
+    {% endif %}
+
+    <a href="/">Go Back</a>
+</body>
+</html>
