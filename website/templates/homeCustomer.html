@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-	<h1>Welcome {{username}}!</h1>
+	<h1>Welcome {{name}}!</h1>
 	<h2>Search Flights</h2>
         <form action="/searchFlights" method="POST" class="search-form">
             <label for="flight">Flight Type</label>
@@ -33,11 +33,18 @@
             <input type="text" id="ticket_id" name="ticket_id" placeholder="Enter Ticket ID" required><br>
             <input type="submit" value="Cancel Trip">
         </form>
+        {% if cancel_message %}
+        <p style="color: green;"><strong>{{ cancel_message }}</strong></p>
+        {% endif %}
+
+        {% if cancel_error %}
+        <p style="color: red;"><strong>{{ cancel_error }}</strong></p>
+        {% endif %}
         <hr>
         <h2>Give Ratings and Comments</h2>
         <form action="/rateFlight" method="POST">
             <label for="flight_number">Flight Number:</label>
-            <input type="text" id="flight_number" name="flight_number" placeholder="Enter Flight Number" required><br>
+            <input type="text" id="ticket_id" name="ticket_id" placeholder="Enter Ticket ID" required><br>
     
             <label for="rating">Rating (1-5):</label>
             <input type="number" id="rating" name="rating" min="1" max="5" required><br>
@@ -47,6 +54,13 @@
     
             <input type="submit" value="Submit Rating and Comment">
         </form>
+        {% if rating_message %}
+        <p style="color: green;"><strong>{{ rating_message }}</strong></p>
+        {% endif %}
+
+        {% if rating_error %}
+        <p style="color: red;"><strong>{{ rating_error }}</strong></p>
+        {% endif %}
         <hr>
         <h2>Track My Spending</h2>
         <form action="/trackSpending" method="POST">

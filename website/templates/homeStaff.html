@@ -3,33 +3,152 @@
 <head>
 </head>
 <body>
-<form action="/post" method="POST">
-	<h1>Welcome {{username}}</h1>
-	<input type="text" name = "blog" placeholder="post" required/> </br>
-	<input type="submit" value = Post />
-</form>
+	<h1>Welcome, {{username}}!</h1>
+    
+    <h2>View Flights</h2>
+    <form action="/viewFlights" method="POST">
+        <label for="date_range">Date Range:</label>
+        <input type="date" id="start_date" name="start_date" placeholder="Start Date">
+        <input type="date" id="end_date" name="end_date" placeholder="End Date"><br><br>
 
-<style type="text/css">
-	table, th, td{
-		border: 1px solid black;
-	}
-</style>
+        <label for="source">Source Airport/City:</label>
+        <input type="text" id="source" name="source" placeholder="Enter Source"><br><br>
 
-<table>
-	<th>Time</th>
-	<th>Post</th>
+        <label for="destination">Destination Airport/City:</label>
+        <input type="text" id="destination" name="destination" placeholder="Enter Destination"><br><br>
 
-{% for line in posts %}
-	<tr>
-		<td>{{line['ts']}}</td>
-		<td>{{line['blog_post']}}</td>
-	</tr>
-{% endfor %}
-</table>
+        <input type="submit" value="View Flights">
+    </form>
+    <hr>
 
-<a href="/logout">Logout</a>
+    <h2>Create New Flight</h2>
+    <form action="/createFlight" method="POST">
+        <label for="flight_number">Flight Number:</label>
+        <input type="text" id="flight_number" name="flight_number" placeholder="Enter Flight Number" required><br>
 
+        <label for="departure_code">Departure Code:</label>
+        <input type="text" id="departure_code" name="departure_code" placeholder="Enter Departure Code" required><br>
+
+        <label for="arrival_code">Arrival Code:</label>
+        <input type="text" id="arrival_code" name="arrival_code" placeholder="Enter Arrival Code" required><br>
+
+        <label for="departure_date">Departure Date:</label>
+        <input type="date" id="departure_date" name="departure_date" required><br>
+
+        <label for="departure_time">Departure Time:</label>
+        <input type="time" id="departure_time" name="departure_time" required><br>
+
+        <label for="arrival_date">Arrival Date:</label>
+        <input type="date" id="arrival_date" name="arrival_date" required><br>
+
+        <label for="arrival_time">Arrival Time:</label>
+        <input type="time" id="arrival_time" name="arrival_time" required><br>
+
+        <label for="base_price">Base Price:</label>
+        <input type="number" id="base_price" name="base_price" required><br>
+
+        <input type="submit" value="Create Flight">
+    </form>
+    <hr>
+
+    <h2>Change Flight Status</h2>
+    <form action="/changeFlightStatus" method="POST">
+        <label for="flight_number">Flight Number:</label>
+        <input type="text" id="flight_number" name="flight_number" placeholder="Enter Flight Number" required><br>
+
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="on_time">On Time</option>
+            <option value="delayed">Delayed</option>
+        </select><br>
+
+        <input type="submit" value="Update Status">
+    </form>
+    <hr>
+
+    <h2>Add Airplane</h2>
+    <form action="/addAirplane" method="POST">
+        <label for="airplane_id">Airplane ID:</label>
+        <input type="text" id="airplane_id" name="airplane_id" placeholder="Enter Airplane ID" required><br>
+
+        <label for="seats">Number of Seats:</label>
+        <input type="number" id="seats" name="seats" required><br>
+
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required><br>
+
+        <label for="manufacture_date">Manufacture Date:</label>
+        <input type="date" id="manufacture_date" name="manufacture_date" required><br>
+
+        <input type="submit" value="Add Airplane">
+    </form>
+    <hr>
+
+    <h2>Add Airport</h2>
+    <form action="/addAirport" method="POST">
+        <label for="airport_code">Airport Code:</label>
+        <input type="text" id="airport_code" name="airport_code" placeholder="Enter Airport Code" required><br>
+
+        <label for="name">Airport Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required><br>
+
+        <label for="terminals">Number of Terminals:</label>
+        <input type="number" id="terminals" name="terminals" required><br>
+
+        <label for="type">Type:</label>
+        <select id="type" name="type" required>
+            <option value="domestic">Domestic</option>
+            <option value="international">International</option>
+            <option value="both">Both</option>
+        </select><br>
+
+        <input type="submit" value="Add Airport">
+    </form>
+    <hr>
+
+    <h2>View Flight Ratings</h2>
+    <form action="/viewFlightRatings" method="POST">
+        <label for="flight_number">Flight Number:</label>
+        <input type="text" id="flight_number" name="flight_number" placeholder="Enter Flight Number" required><br>
+        <input type="submit" value="View Ratings">
+    </form>
+    <hr>
+
+    <h2>Schedule Maintenance</h2>
+    <form action="/scheduleMaintenance" method="POST">
+        <label for="airplane_id">Airplane ID:</label>
+        <input type="text" id="airplane_id" name="airplane_id" placeholder="Enter Airplane ID" required><br>
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required><br>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required><br>
+
+        <input type="submit" value="Schedule Maintenance">
+    </form>
+    <hr>
+
+    <h2>View Frequent Customers</h2>
+    <form action="/viewFrequentCustomers" method="POST">
+        <input type="submit" value="View Frequent Customers">
+    </form>
+    <hr>
+
+    <h2>View Earned Revenue</h2>
+    <form action="/viewRevenue" method="POST">
+        <input type="submit" value="View Revenue">
+    </form>
+    <hr>
+
+    <a href="/logoutStaff">Logout</a>
+
+	
 </body>
-
-
 </html>
