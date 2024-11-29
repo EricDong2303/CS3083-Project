@@ -98,6 +98,7 @@ def loginAuthStaff():
     if (data):
         # creates a session for the the user
         session['username'] = username
+        session['airline_name'] = airline_name
         return redirect(url_for('staffHome'))
     else:
         # returns an error message to the html page
@@ -217,11 +218,8 @@ def searchFlights():
     return render_template('searchFlightResults.html', flights=flights, source=source, destination=destination)
 
 
-# Route for the customer home page
-@app.route('/home')
-def home():
-    if 'email' not in session:
-        return render_template('loginCustomer.html')
+# Created a function to query the customer's name, need to get name when resubmitting the page after success/fail
+def query_customer_name():
     email = session['email']
     cursor = conn.cursor()
     query = 'SELECT first_name FROM customer WHERE email = %s'
@@ -229,6 +227,15 @@ def home():
     customer_data = cursor.fetchone()
     name = customer_data['first_name']
     cursor.close()
+    return name
+
+
+# Route for the customer home page
+@app.route('/home')
+def home():
+    if 'email' not in session:
+        return render_template('loginCustomer.html')
+    name = query_customer_name()
     return render_template('homeCustomer.html', name=name)
 
 
@@ -237,7 +244,8 @@ def home():
 def staffHome():
     if 'username' in session:
         username = session['username']
-        return render_template('homeStaff.html', username=username)
+        airline_name = session['airline_name']
+        return render_template('homeStaff.html', username=username, airline_name=airline_name)
     else:
         return redirect(url_for('loginStaff'))
 
@@ -266,7 +274,8 @@ def cancelTrip():
     # Shows error if customer does not have the ticket
     if not check:
         cursor.close()
-        return render_template('homeCustomer.html', cancel_error="Invalid ticket ID or ticket not found. Can not cancel.")
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name, cancel_error="Invalid ticket ID or ticket not found. Can not cancel.")
     # query to delete the ticket
     query = '''
             DELETE FROM ticket 
@@ -276,7 +285,8 @@ def cancelTrip():
     cursor.execute(query, (ticket_id))
     conn.commit()
     cursor.close()
-    return render_template('homeCustomer.html', cancel_message="Your flight has been canceled!")
+    name = query_customer_name()
+    return render_template('homeCustomer.html', name=name, cancel_message="Your flight has been canceled!")
     
 
 # Route for the customer rating the flights, the customer should have a ticket for the flight they want to review
@@ -297,7 +307,8 @@ def rateFlight():
     # If no ticket or invalid ticket, show an error
     if not ticket:
         cursor.close()
-        return render_template('homeCustomer.html', rating_error="Invalid ticket ID or ticket not found.")
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name, rating_error="Invalid ticket ID or ticket not found.")
 	# Get the info from ticket that was queried
     airline_name = ticket['airline_name']
     flight_number = ticket['flight_number']
@@ -308,13 +319,48 @@ def rateFlight():
     cursor.execute(review_post, (email, flight_number, airline_name, departure_date, departure_time, rating, comment))
     conn.commit()
     cursor.close()
-    return render_template('homeCustomer.html', rating_message="Your review has been submitted!")
+    name = query_customer_name()
+    return render_template('homeCustomer.html', name=name, rating_message="Your review has been submitted!")
 
 
 # Route for showing the amount of money the customer has spent. Customer will enter a date range and result will be shown
 @app.route('/trackSpending', methods=['POST'])
-def track_spending():
+def trackSpending():
     pass
+
+
+# Route to let the airline staff see how much revenue was earned in the last month/year. 
+@app.route('/viewRevenue', methods=['POST'])
+def viewRevenue():
+    # The staff just has to press the button, so we need to get their airline
+    airline_name = session['airline_name']
+    cursor = conn.cursor()
+    # Query for the last month. First get number of days currently, substract to get the first of the month,
+    # then subtract 1 whole month to get previous month. Then filter from that date to end of month
+    last_month_query = '''
+        SELECT SUM(ticket_price) AS total_revenue
+        FROM ticket
+        WHERE airline_name = %s
+        AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY) - INTERVAL 1 MONTH
+        AND purchase_date < DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY);
+    '''
+    cursor.execute(last_month_query, (airline_name,))
+    last_month_rev = cursor.fetchone()['total_revenue'] or 0
+    # Query to get revenue from the last year.
+    last_year_query = '''
+        SELECT SUM(ticket_price) AS total_revenue
+        FROM ticket
+        WHERE airline_name = %s
+        AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        AND purchase_date < CURDATE();
+    '''
+    cursor.execute(last_year_query, (airline_name,))
+    last_year_rev = cursor.fetchone()['total_revenue'] or 0
+    cursor.close()
+    # Displays the page to the staff with the revenue
+    return render_template('viewRevenue.html', last_month_rev=last_month_rev, last_year_rev=last_year_rev)
+
+
 
 
 
