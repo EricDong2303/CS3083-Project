@@ -463,6 +463,33 @@ def changeFlightStatus():
     return redirect(url_for('staffHome'))
 
 
+# Route for airline staff to see the average rating and all comments given for a specific flight
+@app.route('/viewFlightRatings', methods=['POST'])
+def viewFlightRatings():
+    # Get the flight number and airline_name that will be used to query
+    flight_number = request.form['flight_number']
+    airline_name = session['airline_name']
+    cursor = conn.cursor()
+    # Query for average rating of the specific flight number
+    avg_rating_query = '''
+        SELECT AVG(rating) AS average_rating
+        FROM review
+        WHERE flight_number = %s AND airline_name = %s
+    '''
+    cursor.execute(avg_rating_query, (flight_number, airline_name))
+    avg_rating = cursor.fetchone()['average_rating']
+    # Query for all the comments made about this flight
+    comments_query = '''
+        SELECT comment
+        FROM review
+        WHERE flight_number = %s AND airline_name = %s
+    '''
+    cursor.execute(comments_query, (flight_number, airline_name))
+    comments = cursor.fetchall()
+    cursor.close()
+    # Go to the new page where it displays all this info
+    return render_template('flightRatings.html', flight_number=flight_number, average_rating=avg_rating, comments=comments)
+
 
 
 
@@ -474,9 +501,8 @@ def changeFlightStatus():
 # Airline Staff
 # 1) View flights for the airline that staff works for
 # 2) Create new flights for airline that staff works for
-# 3) view ratings of a flight, need to see all comments and ratings given by customers
-# 4) Schedule maintence, planes under maintenance cant be assigned to flight
-# 5) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
+# 3) Schedule maintence, planes under maintenance cant be assigned to flight
+# 4) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
 
 
 

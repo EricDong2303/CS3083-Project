@@ -1,0 +1,28 @@
+<!--This file is to display the average ratings and all the comments for a specific flight-->
+<html>
+<head>
+</head>
+<body>
+
+    <h2><strong>Average Ratings for Flight Number:</strong> {{ flight_number }}</h2>
+
+    {% if average_rating is not none %}
+        <h2>Average Rating: {{ average_rating }}</h2>
+    {% else %}
+        <h2>No ratings available for this flight.</h2>
+    {% endif %}
+
+    {% if comments %}
+        <h2>Customer Comments:</h2>
+        <ul>
+            {% for comment in comments %}
+                <li>{{ comment['comment'] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No comments available for this flight.</p>
+    {% endif %}
+
+    <a href="/staffHome"><button>GO BACK</button></a>
+</body>
+</html>
