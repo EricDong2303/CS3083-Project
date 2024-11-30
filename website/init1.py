@@ -233,11 +233,12 @@ def query_customer_name():
 # Route for the customer home page
 @app.route('/home')
 def home():
-    if 'email' not in session:
+    if 'email' in session:
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name)
+    else:
         return render_template('loginCustomer.html')
-    name = query_customer_name()
-    return render_template('homeCustomer.html', name=name)
-
+    
 
 # Route for the staff's home page
 @app.route('/staffHome')
@@ -371,7 +372,7 @@ def addAirport():
     country = request.form['country']
     number_of_terminals = request.form['terminals']
     type = request.form['type']
-
+    # Do the query
     cursor = conn.cursor()
     query = '''
         INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
@@ -380,6 +381,27 @@ def addAirport():
     cursor.close()
     return redirect(url_for('staffHome'))
 
+
+# Route for staff to be able to add an airplane into the system
+@app.route('/addAirplane', methods=['POST'])
+def addAirplane():
+    # Gets the info the staff enters
+    airplane_id = request.form['airplane_id']
+    seats = request.form['seats']
+    company = request.form['company']
+    model_number = request.form['model']
+    manufacture_date = request.form['manufacture_date']
+    airline_name = session['airline_name']
+    # Do the query
+    cursor = conn.cursor()
+    query = '''
+        INSERT INTO airplane (id, airline_name, seats, company, model_number, manufacture_date)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    '''
+    cursor.execute(query, (airplane_id, airline_name, seats, company, model_number, manufacture_date))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('staffHome'))
 
 
 # To Do
@@ -391,10 +413,9 @@ def addAirport():
 # 1) View flights for the airline that staff works for
 # 2) Create new flights for airline that staff works for
 # 3) change status of a flight
-# 4) Add airplane to the system
-# 5) view ratings of a flight, need to see all comments and ratings given by customers
-# 6) Schedule maintence, planes under maintenance cant be assigned to flight
-# 7) view frequent customers within last year. Should also be able to see what flights the customer has taken on the staff airline
+# 4) view ratings of a flight, need to see all comments and ratings given by customers
+# 5) Schedule maintence, planes under maintenance cant be assigned to flight
+# 6) view frequent customers within last year. Should also be able to see what flights the customer has taken on the staff airline
 
 
 
