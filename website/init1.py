@@ -361,6 +361,27 @@ def viewRevenue():
     return render_template('viewRevenue.html', last_month_rev=last_month_rev, last_year_rev=last_year_rev)
 
 
+# Route to add airport into the database system
+@app.route('/addAirport', methods=['POST'])
+def addAirport():
+    # Get the info that the staff enters
+    code = request.form['airport_code']
+    name = request.form['name']
+    city = request.form['city']
+    country = request.form['country']
+    number_of_terminals = request.form['terminals']
+    type = request.form['type']
+
+    cursor = conn.cursor()
+    query = '''
+        INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
+    cursor.execute(query, (code, name, city, country, number_of_terminals, type))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('staffHome'))
+
+
+
 # To Do
 # Customer:
 # 1) View flights that customer has purchased
@@ -371,10 +392,9 @@ def viewRevenue():
 # 2) Create new flights for airline that staff works for
 # 3) change status of a flight
 # 4) Add airplane to the system
-# 5) add airport to the system
-# 6) view ratings of a flight, need to see all comments and ratings given by customers
-# 7) Schedule maintence, planes under maintenance cant be assigned to flight
-# 8) view frequent customers within last year. Should also be able to see what flights the customer has taken on the staff airline
+# 5) view ratings of a flight, need to see all comments and ratings given by customers
+# 6) Schedule maintence, planes under maintenance cant be assigned to flight
+# 7) view frequent customers within last year. Should also be able to see what flights the customer has taken on the staff airline
 
 
 
