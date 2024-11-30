@@ -1,0 +1,17 @@
+<html>
+<head>
+</head>
+<body>
+    <h1>Most Frequent Customer</h1>
+
+    {% if frequent_customer %}
+        <p><strong>First Name:</strong> {{ frequent_customer['first_name'] }}</p>
+        <p><strong>Last Name:</strong> {{ frequent_customer['last_name'] }}</p>
+        <p><strong>Number of Flights This Year:</strong> {{ frequent_customer['num_flights'] }}</p>
+    {% else %}
+        <p>No frequent customers found within the last year.</p>
+    {% endif %}
+
+    <a href="/staffHome"><button>GO BACK</button></a>
+</body>
+</html>

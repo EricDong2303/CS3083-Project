@@ -410,6 +410,37 @@ def viewFlight():
     pass
 
 
+# Route for the airline staff to see who the most frequent customer is
+@app.route('/viewFrequentCustomer', methods=['POST'])
+def viewFrequentCustomer():
+    # When the staff presses on the button, it should bring them to a new page that shows who the most frequent customer is
+    airline_name = session['airline_name']
+    cursor = conn.cursor()
+    query = '''
+        SELECT c.first_name, c.last_name, COUNT(*) AS number_of_flights
+        FROM customer c
+        JOIN purchase p ON c.email = p.email
+        JOIN ticket t ON p.ticket_id = t.ticket_id
+        JOIN flight f ON t.flight_number = f.flight_number AND t.airline_name = f.airline_name
+        WHERE f.airline_name = %s AND t.purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        GROUP BY c.first_name, c.last_name
+        ORDER BY number_of_flights DESC
+        LIMIT 1
+    '''
+    cursor.execute(query, (airline_name,))
+    result = cursor.fetchone()
+    cursor.close()
+    # Put the result into a list, then the next page will extract the info and display it
+    if not result:
+        frequent_customer = None
+    else:
+        frequent_customer = {
+            'first_name': result['first_name'],
+            'last_name': result['last_name'],
+            'num_flights': result['number_of_flights']
+        }
+    # The result will be shown on the new page
+    return render_template('frequentCustomer.html', frequent_customer=frequent_customer)
 
 
 # To Do
@@ -423,7 +454,7 @@ def viewFlight():
 # 3) change status of a flight
 # 4) view ratings of a flight, need to see all comments and ratings given by customers
 # 5) Schedule maintence, planes under maintenance cant be assigned to flight
-# 6) view frequent customers within last year. Should also be able to see what flights the customer has taken on the staff airline
+# 6) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
 
 
 
