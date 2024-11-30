@@ -4,12 +4,18 @@
 </head>
 <body>
 	<h1>Welcome {{name}}!</h1>
+
+    <h2>View My Flights</h2>
+    <form action="/viewFlight" method="POST">
+        <input type="submit" value="View My Flights">
+    </form>
+    <hr>
+
 	<h2>Search Flights</h2>
         <form action="/searchFlights" method="POST" class="search-form">
             <label for="flight">Flight Type</label>
             <input type="radio" name="flight_type" value="one-way" onchange='toggleReturn()' checked> One-way
-            <input type="radio" name="flight_type" value="round-trip" onchange='toggleReturn()'> Round-trip
-            <br>
+            <input type="radio" name="flight_type" value="round-trip" onchange='toggleReturn()'> Round-trip <br>
             <br>
 
             <label for="source">Source Airport:</label>
@@ -26,8 +32,9 @@
             
             <input type="submit" value="Search Flights">
         </form>
-        <hr>
-        <h2>Cancel Trip</h2>
+    <hr>
+
+    <h2>Cancel Trip</h2>
         <form action="/cancelTrip" method="POST">
             <label for="ticket_id">Ticket ID:</label>
             <input type="text" id="ticket_id" name="ticket_id" placeholder="Enter Ticket ID" required><br>
@@ -36,12 +43,12 @@
         {% if cancel_message %}
         <p style="color: green;"><strong>{{ cancel_message }}</strong></p>
         {% endif %}
-
         {% if cancel_error %}
         <p style="color: red;"><strong>{{ cancel_error }}</strong></p>
         {% endif %}
         <hr>
-        <h2>Give Ratings and Comments</h2>
+
+    <h2>Give Ratings and Comments</h2>
         <form action="/rateFlight" method="POST">
             <label for="flight_number">Flight Number:</label>
             <input type="text" id="ticket_id" name="ticket_id" placeholder="Enter Ticket ID" required><br>
@@ -62,7 +69,8 @@
         <p style="color: red;"><strong>{{ rating_error }}</strong></p>
         {% endif %}
         <hr>
-        <h2>Track My Spending</h2>
+
+    <h2>Track My Spending</h2>
         <form action="/trackSpending" method="POST">
             <label for="date_range">Date Range:</label>
             <input type="date" id="start_date" name="start_date" placeholder="Start Date">
@@ -70,10 +78,7 @@
             <input type="submit" value="Track Spending">
         </form>
 
-
 <a href="/logoutCustomer">Logout</a>
 
 </body>
-
-
 </html>

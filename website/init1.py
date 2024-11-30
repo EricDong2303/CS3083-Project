@@ -404,6 +404,14 @@ def addAirplane():
     return redirect(url_for('staffHome'))
 
 
+# Route for the customer to be able to view their upcoming flights, to click the button, it should bring them to the next page
+@app.route('/viewFlight', methods=['POST'])
+def viewFlight():
+    pass
+
+
+
+
 # To Do
 # Customer:
 # 1) View flights that customer has purchased
