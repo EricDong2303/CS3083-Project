@@ -358,11 +358,11 @@ def viewRevenue():
     cursor.execute(last_year_query, (airline_name,))
     last_year_rev = cursor.fetchone()['total_revenue'] or 0
     cursor.close()
-    # Displays the page to the staff with the revenue
+    # Displays a new page to the staff with the revenue
     return render_template('viewRevenue.html', last_month_rev=last_month_rev, last_year_rev=last_year_rev)
 
 
-# Route to add airport into the database system
+# Route to add airport into the database system, does not change the page for staff but updates the database
 @app.route('/addAirport', methods=['POST'])
 def addAirport():
     # Get the info that the staff enters
@@ -382,7 +382,7 @@ def addAirport():
     return redirect(url_for('staffHome'))
 
 
-# Route for staff to be able to add an airplane into the system
+# Route for staff to be able to add an airplane into the system, does not change the page for staff but updates the database
 @app.route('/addAirplane', methods=['POST'])
 def addAirplane():
     # Gets the info the staff enters
@@ -443,6 +443,29 @@ def viewFrequentCustomer():
     return render_template('frequentCustomer.html', frequent_customer=frequent_customer)
 
 
+# Route for the staff to change the status of a flight, does not change the page for staff but updates the database
+@app.route('/changeFlightStatus', methods=['POST'])
+def changeFlightStatus():
+    # Bring the info the staff enters
+    flight_number = request.form['flight_number']
+    new_status = request.form['status']
+    airline_name = session['airline_name']
+    cursor = conn.cursor()
+    # Do the query where it updates the status of the speciifc flight
+    query = '''
+        UPDATE flight
+        SET flight_status = %s
+        WHERE flight_number = %s AND airline_name = %s
+    '''
+    cursor.execute(query, (new_status, flight_number, airline_name))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('staffHome'))
+
+
+
+
+
 # To Do
 # Customer:
 # 1) View flights that customer has purchased
@@ -451,10 +474,9 @@ def viewFrequentCustomer():
 # Airline Staff
 # 1) View flights for the airline that staff works for
 # 2) Create new flights for airline that staff works for
-# 3) change status of a flight
-# 4) view ratings of a flight, need to see all comments and ratings given by customers
-# 5) Schedule maintence, planes under maintenance cant be assigned to flight
-# 6) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
+# 3) view ratings of a flight, need to see all comments and ratings given by customers
+# 4) Schedule maintence, planes under maintenance cant be assigned to flight
+# 5) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
 
 
 
