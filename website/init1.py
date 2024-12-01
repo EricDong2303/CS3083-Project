@@ -491,18 +491,40 @@ def viewFlightRatings():
     return render_template('flightRatings.html', flight_number=flight_number, average_rating=avg_rating, comments=comments)
 
 
+# Route for the airline staff to schedule a maintenance for the plane, staff needs to input the data
+@app.route('/scheduleMaintenance', methods=['POST'])
+def scheduleMaintenance():
+    # Get the info that the staff inputs
+    airline_name = request.form['airline_name']
+    airplane_id = request.form['airplane_id']
+    maintenance_start = request.form['start_date']
+    maintenance_end = request.form['end_date']
+    cursor = conn.cursor()
+    # Do the SQL insert with the data provided
+    query = '''
+        INSERT INTO maintenance VALUES (%s, %s, %s, %s)
+    '''
+    cursor.execute(query, (airplane_id, airline_name, maintenance_start, maintenance_end))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('staffHome'))
 
 
-# To Do
+
+# Cases Needed To Do
 # Customer:
-# 1) View flights that customer has purchased
-# 2) Being able to purchase tickets
-# 3) Track customer spend
+# 1) View My flights: Provide various ways for the user to see flights information which he/she purchased. 
+# The default should be showing for the future flights.
+# 2) Search for flights: Need to test if round trip case works
+# 3) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
+# You may find it easier to implement this along with a use case to search for flights
+# 4) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months. 
+# Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
 # Airline Staff
-# 1) View flights for the airline that staff works for
+# 1) Defaults will be showing all the futureflightsoperated by the airline he/she works for the next 30 days.
+#  He/she will be able to see all the current/future/past flights operated by the airline he/she works for based range of dates, source/destination airports/city etc
 # 2) Create new flights for airline that staff works for
-# 3) Schedule maintence, planes under maintenance cant be assigned to flight
-# 4) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
+# 3) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
 
 
 
