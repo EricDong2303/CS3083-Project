@@ -1,0 +1,55 @@
+<!--Staff searches customer to see what flights the customer has taken on the staff airline-->
+
+<html>
+<head>
+    <h2><strong>All Flights Taken Through Your Airline by:</strong> {{ customer.first_name }} {{ customer.last_name }}</h2>
+
+    <title>Customer Flights</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    </head>
+    <body>
+    {% if flights %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Departure Date</th>
+                    <th>Arrival Date</th>
+                    <th>Departure Airport</th>
+                    <th>Arrival Airport</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight.flight_number }}</td>
+                    <td>{{ flight.departure_date }}</td>
+                    <td>{{ flight.arrival_date }}</td>
+                    <td>{{ flight.departure_code }}</td>
+                    <td>{{ flight.arrival_code }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p><strong>No flights found for this customer on your airline.</strong></p>
+    {% endif %}
+
+    <a href="/staffHome"><button>GO BACK</button></a>
+</body>
+</html>

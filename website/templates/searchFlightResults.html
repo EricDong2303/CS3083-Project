@@ -21,7 +21,9 @@
     <h1>Search Results</h1>
     <p>Showing flights from <strong>{{ source }}</strong> to <strong>{{ destination }}</strong>:</p>
     
-    {% if flights %}
+    <!-- Outbound Flight Info -->
+    <h2>Outbound Flights</h2>
+    {% if outbound_flights %}
         <table>
             <tr>
                 <th>Flight Number</th>
@@ -32,7 +34,7 @@
                 <th>Arrival Time</th>
                 <th>Base Price</th>
             </tr>
-            {% for flight in flights %}
+            {% for flight in outbound_flights %}
             <tr>
                 <td>{{ flight['flight_number'] }}</td>
                 <td>{{ flight['airline_name'] }}</td>
@@ -45,9 +47,40 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No flights found for your search criteria.</p>
+        <p>No outbound flights found for your search criteria.</p>
     {% endif %}
 
-    <a href="/">Go Back</a>
+    <!-- Return Flight Info -->
+    {% if return_flights is not none %}
+        <h2> Return Flights</h2>
+        {% if return_flights %}
+            <table>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Airline Name</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
+                    <th>Base Price</th>
+                </tr>
+                {% for flight in return_flights %}
+                <tr>
+                    <td>{{ flight['flight_number'] }}</td>
+                    <td>{{ flight['airline_name'] }}</td>
+                    <td>{{ flight['departure_date'] }}</td>
+                    <td>{{ flight['departure_time'] }}</td>
+                    <td>{{ flight['arrival_date'] }}</td>
+                    <td>{{ flight['arrival_time'] }}</td>
+                    <td>${{ flight['base_price'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No return flights found for your search criteria.</p>
+        {% endif %}
+    {% endif %}
+
+    <a href="/home">Go Back</a>
 </body>
 </html>

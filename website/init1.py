@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3307,
+                       port=3306,
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -176,18 +176,18 @@ def registerAuthStaff():
         return render_template('loginStaff.html')
 
 
-#Define route of customer logout
+# Define route of customer logout
 @app.route('/logoutCustomer')
 def logoutCustomer():
     session.pop('email')
     return redirect('/loginCustomer')
 
 
-#Define route for staff logout 
+# Define route for staff logout
 @app.route('/logoutStaff')
 def logoutStaff():
-	session.pop('username')
-	return redirect('/loginStaff')
+    session.pop('username')
+    return redirect('/loginStaff')
 
 
 # Route for searching the flights
@@ -200,22 +200,34 @@ def searchFlights():
     return_date = request.form.get('return_date', None)  # Optional for round trips
     # query to fetch flights based on input
     cursor = conn.cursor()
-    query = '''
+    outbound_query = '''
         SELECT flight_number, airline_name, departure_date, departure_time, arrival_date, arrival_time, base_price
         FROM flight
-        WHERE arrival_code = %s AND departure_code = %s AND departure_date = %s;
+        WHERE arrival_code = %s AND departure_code = %s AND departure_date = %s
     '''
-    params = (source, destination, departure_date)
-    # return_date if it's provided
-    if return_date:
-        query += " AND arrival_date = %s"
-        params += (return_date,)
+    cursor.execute(outbound_query, (destination, source, departure_date))
+    outbound_flights = cursor.fetchall()
 
-    cursor.execute(query, params)
-    flights = cursor.fetchall()
+    # return_date if it's provided
+    return_flights = None
+    if return_date:
+        return_query = '''
+            SELECT flight_number, airline_name, departure_date, departure_time, arrival_date, arrival_time, base_price
+            FROM flight
+            WHERE departure_code = %s AND arrival_code = %s AND departure_date = %s
+        '''
+        # for returns, the we're departing from the destination and returning to the source
+        cursor.execute(return_query, (destination, source, return_date))
+        return_flights = cursor.fetchall()
+
     cursor.close()
     # Brings the customer to this page where it will show results
-    return render_template('searchFlightResults.html', flights=flights, source=source, destination=destination)
+    return render_template(
+        'searchFlightResults.html',
+        outbound_flights=outbound_flights,
+        return_flights=return_flights,
+        source=source,
+        destination=destination)
 
 
 # Created a function to query the customer's name, need to get name when resubmitting the page after success/fail
@@ -238,7 +250,7 @@ def home():
         return render_template('homeCustomer.html', name=name)
     else:
         return render_template('loginCustomer.html')
-    
+
 
 # Route for the staff's home page
 @app.route('/staffHome')
@@ -279,16 +291,16 @@ def cancelTrip():
         return render_template('homeCustomer.html', name=name, cancel_error="Invalid ticket ID or ticket not found. Can not cancel.")
     # query to delete the ticket
     query = '''
-            DELETE FROM ticket 
-            WHERE ticket_id = %s 
-            AND departure_date > CURDATE() 
+            DELETE FROM ticket
+            WHERE ticket_id = %s
+            AND departure_date > CURDATE()
             OR (departure_date = CURDATE() AND departure_time > CURTIME())'''
     cursor.execute(query, (ticket_id))
     conn.commit()
     cursor.close()
     name = query_customer_name()
     return render_template('homeCustomer.html', name=name, cancel_message="Your flight has been canceled!")
-    
+
 
 # Route for the customer rating the flights, the customer should have a ticket for the flight they want to review
 @app.route('/rateFlight', methods=['POST'])
@@ -300,9 +312,9 @@ def rateFlight():
     ticket_id = request.form['ticket_id']
     cursor = conn.cursor()
     # Need to query to get info from the ticket
-    ticket_find = '''SELECT * 
-    		FROM ticket
-    		WHERE ticket_id = %s'''
+    ticket_find = '''SELECT *
+        FROM ticket
+        WHERE ticket_id = %s'''
     cursor.execute(ticket_find, (ticket_id,))
     ticket = cursor.fetchone()
     # If no ticket or invalid ticket, show an error
@@ -310,7 +322,7 @@ def rateFlight():
         cursor.close()
         name = query_customer_name()
         return render_template('homeCustomer.html', name=name, rating_error="Invalid ticket ID or ticket not found.")
-	# Get the info from ticket that was queried
+    # Get the info from ticket that was queried
     airline_name = ticket['airline_name']
     flight_number = ticket['flight_number']
     departure_date = ticket['departure_date']
@@ -330,7 +342,7 @@ def trackSpending():
     pass
 
 
-# Route to let the airline staff see how much revenue was earned in the last month/year. 
+# Route to let the airline staff see how much revenue was earned in the last month/year.
 @app.route('/viewRevenue', methods=['POST'])
 def viewRevenue():
     # The staff just has to press the button, so we need to get their airline
@@ -407,7 +419,21 @@ def addAirplane():
 # Route for the customer to be able to view their upcoming flights, to click the button, it should bring them to the next page
 @app.route('/viewFlight', methods=['POST'])
 def viewFlight():
-    pass
+    # get the customer's email to determine what they've bought
+    email = session['email']
+    cursor = conn.cursor()
+    flights_query = '''
+    SELECT f.flight_number, f.airline_name, f.departure_date, f.departure_time, f.arrival_time, f.arrival_date, f.base_price, f.flight_status
+    FROM purchase p
+    JOIN ticket t ON p.ticket_id = t.ticket_id
+    JOIN flight f ON f.flight_number = t.flight_number
+    WHERE p.email = %s AND f.departure_time <= NOW();
+    '''
+    cursor.execute(flights_query, (email))
+    flights = cursor.fetchall()
+    cursor.close()
+    # result is sent to the page
+    return render_template('viewFlights.html', flights=flights)
 
 
 # Route for the airline staff to see who the most frequent customer is
@@ -463,6 +489,42 @@ def changeFlightStatus():
     return redirect(url_for('staffHome'))
 
 
+# Route for airline staff to view flights a customer has taken
+@app.route('/viewCustomer', methods=['POST'])
+def viewCustomer():
+    # get the customer info and airline name
+    airline_name = session['airline_name']
+    email = request.form['email']
+    cursor = conn.cursor()
+    # query to get customer full name for display
+    customer_name_query = '''
+        SELECT first_name, last_name
+        FROM customer
+        WHERE email = %s;
+    '''
+    cursor.execute(customer_name_query, (email,))
+    customer = cursor.fetchone()
+
+    if not customer:
+        error = "Customer not found."
+        cursor.close()
+        return render_template('viewCustomer.html', error=error)
+
+    # query to get flight info
+    flight_info_query = '''
+        SELECT f.flight_number, f.departure_date, f.arrival_date, f.departure_code, f.arrival_code
+        FROM purchase p
+        JOIN ticket t ON p.ticket_id = t.ticket_id
+        JOIN flight f ON t.flight_number = f.flight_number AND t.airline_name = f.airline_name
+        WHERE p.email = %s AND f.airline_name = %s;
+    '''
+    cursor.execute(flight_info_query, (email, airline_name))
+    flights = cursor.fetchall()
+    cursor.close()
+    # display info on new page
+    return render_template('viewCustomer.html', customer=customer, flights=flights)
+
+
 # Route for airline staff to see the average rating and all comments given for a specific flight
 @app.route('/viewFlightRatings', methods=['POST'])
 def viewFlightRatings():
@@ -510,22 +572,21 @@ def scheduleMaintenance():
     return redirect(url_for('staffHome'))
 
 
-
 # Cases Needed To Do
 # Customer:
-# 1) View My flights: Provide various ways for the user to see flights information which he/she purchased. 
-# The default should be showing for the future flights.
-# 2) Search for flights: Need to test if round trip case works
-# 3) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
+# 1) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
 # You may find it easier to implement this along with a use case to search for flights
-# 4) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months. 
+# 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months. 
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
+# 3) Optionally provide a way to see previous purchased flights
 # Airline Staff
 # 1) Defaults will be showing all the futureflightsoperated by the airline he/she works for the next 30 days.
 #  He/she will be able to see all the current/future/past flights operated by the airline he/she works for based range of dates, source/destination airports/city etc
 # 2) Create new flights for airline that staff works for
-# 3) Customer Search: Should also be able to see what flights the customer has taken on the staff airline
 
+# General things:
+# 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
+# 2) other prevention included in Enforcing complex constraints (if we haven't already)
 
 
 
