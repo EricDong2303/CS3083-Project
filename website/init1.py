@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3306,
+                       port=3307,
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -572,6 +572,36 @@ def scheduleMaintenance():
     return redirect(url_for('staffHome'))
 
 
+# Route for the airline staff to add a flight
+@app.route('/createFlight', methods=['POST'])
+def createFlight():
+    # Grab the info the staff enters
+    flight_number = request.form['flight_number']
+    airplane_id = request.form['airplane_id']
+    departure_code = request.form['departure_code']
+    arrival_code = request.form['arrival_code']
+    departure_date = request.form['departure_date']
+    departure_time = request.form['departure_time']
+    arrival_date = request.form['arrival_date']
+    arrival_time = request.form['arrival_time']
+    base_price = request.form['base_price']
+    airline_name = session['airline_name']
+    # We are going to assume that the flight created starts out on time
+    flight_status = 'on_time'
+    cursor = conn.cursor()
+    query = '''
+        INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    '''
+    cursor.execute(query, (
+            flight_number, airline_name, arrival_code, departure_code, airplane_id,
+            departure_date, departure_time, flight_status,
+            arrival_date, arrival_time, base_price
+        ))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('staffHome'))
+
+
 # Cases Needed To Do
 # Customer:
 # 1) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
@@ -582,7 +612,6 @@ def scheduleMaintenance():
 # Airline Staff
 # 1) Defaults will be showing all the futureflightsoperated by the airline he/she works for the next 30 days.
 #  He/she will be able to see all the current/future/past flights operated by the airline he/she works for based range of dates, source/destination airports/city etc
-# 2) Create new flights for airline that staff works for
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
