@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3307,
+                       port=3306, # 3307 or 3306 depending on who's using it
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -81,15 +81,14 @@ def loginAuthCustomer():
 @app.route('/loginAuthStaff', methods=['GET', 'POST'])
 def loginAuthStaff():
     # grabs information from the forms
-    airline_name = request.form['airline_name']
     username = request.form['username']
     password = request.form['password']
     # cursor used to send queries
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM airline_staff WHERE airline_name = %s \
-             and username = %s and password = %s'
-    cursor.execute(query, (airline_name, username, password))
+    query = 'SELECT * FROM airline_staff WHERE \
+             username = %s and password = %s'
+    cursor.execute(query, (username, password))
     # stores the results in a variable
     data = cursor.fetchone()
     # use fetchall() if you are expecting more than 1 data row
@@ -98,7 +97,7 @@ def loginAuthStaff():
     if (data):
         # creates a session for the the user
         session['username'] = username
-        session['airline_name'] = airline_name
+        session['airline_name'] = data["airline_name"]
         return redirect(url_for('staffHome'))
     else:
         # returns an error message to the html page
@@ -615,8 +614,9 @@ def createFlight():
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
-# 2) other prevention included in Enforcing complex constraints (if we haven't already)
+# should use the funtion thing dey mentioned that cleans text
 
+# 2) other prevention included in Enforcing complex constraints (if we haven't already)
 
 
 app.secret_key = 'some key that you will never guess'
