@@ -1,0 +1,39 @@
+<!-- This displays the flight roster after the staff views the customers on a specific flight -->
+
+<html>
+    <head>
+        <title>Flight Roster</title>
+    </head>
+    <body>
+        <h1>These are the customers on flight {{ flight_number }}</h1>
+        {% if customer_info %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Ticket ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customer_info %}
+                    <tr>
+                        <td>{{ flight_number }}</td>
+                        <td>{{ customer['first_name'] }}</td>
+                        <td>{{ customer['last_name'] }}</td>
+                        <td>{{ customer['email'] }}</td>
+                        <td>{{ customer['ticket_id'] }}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are currently no customers on this flight.</p>
+    {% endif %}
+
+    <a href="/staffHome">Back to Home</a>
+    </body>
+</html>

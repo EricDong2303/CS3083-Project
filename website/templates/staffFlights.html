@@ -32,6 +32,12 @@
                         <td>{{ flight['arrival_time'] }}</td>
                         <td>{{ flight['flight_status'] }}</td>
                         <td>${{ flight['base_price'] }}</td>
+                        <td><!-- Form to redirect to the roster for this flight -->
+                            <form action="/viewRoster" method="POST">
+                                <input type="hidden" name="flight_number" value="{{ flight['flight_number'] }}">
+                                <input type="submit" value="View Roster">
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

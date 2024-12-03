@@ -101,7 +101,7 @@ def loginAuthStaff():
         return redirect(url_for('staffHome'))
     else:
         # returns an error message to the html page
-        error = 'Invalid airline, username, or password'
+        error = 'Invalid username or password'
         return render_template('loginStaff.html', error=error)
 
 
@@ -436,13 +436,13 @@ def staffViewFlight():
     filters = [airline_name]
     # if start date not specified, make default present
     if not start_date:
-        default_query += " AND departure_date <= NOW()"
+        default_query += " AND departure_date >= NOW()"
     else:
-        default_query += " AND departure_date <= %s"
+        default_query += " AND departure_date >= %s"
         filters.append(start_date)
     # if end date not specified, make default 30 days
     if not end_date:
-        default_query += " AND departure_date >= DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY);"
+        default_query += " AND departure_date <= DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY)"
     else:
         default_query += " AND departure_date <= %s"
         filters.append(end_date)
@@ -619,19 +619,40 @@ def scheduleMaintenance():
     return redirect(url_for('staffHome'))
 
 
+# route for airline staff to view customers on a given flight
+@app.route('/viewRoster', methods=['POST'])
+def viewRoster():
+    airline_name = session['airline_name']
+    flight_number = request.form['flight_number']
+
+    cursor = conn.cursor()
+    query = '''
+    SELECT c.first_name, c.last_name, c.email, t.ticket_id
+    FROM ticket t
+    JOIN purchase p on t.ticket_id = p.ticket_id
+    JOIN customer c on c.email = p.email
+    WHERE t.airline_name = %s AND t.flight_number = %s
+    '''
+
+    cursor.execute(query, (airline_name, flight_number))
+    customer_info = cursor.fetchall()
+    cursor.close()
+    return render_template('flightRoster.html', flight_number=flight_number, customer_info=customer_info)
+
+
 # Route for the airline staff to add a flight
 @app.route('/createFlight', methods=['POST'])
 def createFlight():
     # Grab the info the staff enters
     flight_number = request.form['flight_number']
-    airplane_id = request.form['airplane_id']  # check if airplane exists
-    departure_code = request.form['departure_code']  # check if airport exists
-    arrival_code = request.form['arrival_code']  # check if airport exists -- should prob also check to see if this is diff from departure
-    departure_date = request.form['departure_date']  # check if this date is allowed (a real date?)
-    departure_time = request.form['departure_time']  # check if this time exists -- idk if that's possible to fake
-    arrival_date = request.form['arrival_date']  # check if this date is allowed - after the departure date
-    arrival_time = request.form['arrival_time']  # cehck if this tiem exists
-    base_price = request.form['base_price']  # i assume negative prices would cause errors
+    airplane_id = request.form['airplane_id']
+    departure_code = request.form['departure_code']
+    arrival_code = request.form['arrival_code']
+    departure_date = request.form['departure_date']
+    departure_time = request.form['departure_time']
+    arrival_date = request.form['arrival_date']
+    arrival_time = request.form['arrival_time']
+    base_price = request.form['base_price']
     airline_name = session['airline_name']
     # We are going to assume that the flight created starts out on time
     flight_status = 'on_time'
@@ -683,8 +704,6 @@ def createFlight():
 # 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months. 
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
 # 3) Optionally provide a way to see previous purchased flights
-# Airline Staff
-# 1)He/she will be able to see all the customers of a particular flight.
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
