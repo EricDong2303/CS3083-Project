@@ -186,6 +186,7 @@ def logoutCustomer():
 @app.route('/logoutStaff')
 def logoutStaff():
     session.pop('username')
+    session.pop('airline_name')
     return redirect('/loginStaff')
 
 
@@ -614,7 +615,7 @@ def createFlight():
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
-# should use the funtion thing dey mentioned that cleans text
+# should use the function thing dey mentioned that cleans text
 
 # 2) other prevention included in Enforcing complex constraints (if we haven't already)
 
