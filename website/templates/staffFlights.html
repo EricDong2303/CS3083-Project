@@ -1,0 +1,44 @@
+<!--Staff view flights that are upcoming-->
+<html>
+<head>
+    <title>My Flights</title>
+</head>
+<body>
+    <h1>Your Flights</h1>
+    {% if flights %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Departure Airport</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Airport</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
+                    <th>Status</th>
+                    <th>Base Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                    <tr>
+                        <td>{{ flight['flight_number'] }}</td>
+                        <td>{{ flight['departure_code'] }}</td>
+                        <td>{{ flight['departure_date'] }}</td>
+                        <td>{{ flight['departure_time'] }}</td>
+                        <td>{{ flight['arrival_code'] }}</td>
+                        <td>{{ flight['arrival_date'] }}</td>
+                        <td>{{ flight['arrival_time'] }}</td>
+                        <td>{{ flight['flight_status'] }}</td>
+                        <td>${{ flight['base_price'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no flights within this range.</p>
+    {% endif %}
+    <a href="/staffHome">Back to Home</a>
+</body>
+</html>

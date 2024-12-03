@@ -416,12 +416,59 @@ def addAirplane():
     return redirect(url_for('staffHome'))
 
 
+# Route for staff to view future flights (or past flights)
+@app.route('/staffViewFlight', methods=['POST'])
+def staffViewFlight():
+    # get airline from session
+    airline_name = session['airline_name']
+    # get the rest of the info from the form
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    source = request.form['source']
+    destination = request.form['destination']
+
+    cursor = conn.cursor()
+    default_query = '''
+    SELECT flight_number, arrival_code, departure_code, departure_date, departure_time, arrival_time, arrival_date, base_price, flight_status
+    FROM flight
+    WHERE airline_name = %s
+    '''
+    filters = [airline_name]
+    # if start date not specified, make default present
+    if not start_date:
+        default_query += " AND departure_date <= NOW()"
+    else:
+        default_query += " AND departure_date <= %s"
+        filters.append(start_date)
+    # if end date not specified, make default 30 days
+    if not end_date:
+        default_query += " AND departure_date >= DATE_ADD(CURRENT_DATE(), INTERVAL 30 DAY);"
+    else:
+        default_query += " AND departure_date <= %s"
+        filters.append(end_date)
+
+    # if source is given, use it to filter query
+    if source:
+        default_query += " AND departure_code = %s"
+        filters.append(source)
+
+    # if destination airport is given, use to filter query
+    if destination:
+        default_query += " AND arrival_code = %s"
+        filters.append(destination)
+
+    cursor.execute(default_query, filters)
+    flights = cursor.fetchall()
+    cursor.close()
+    return render_template('staffFlights.html', flights=flights)
+
+
 # Route for the customer to be able to view their upcoming flights, to click the button, it should bring them to the next page
 @app.route('/viewFlight', methods=['POST'])
 def viewFlight():
     # get the customer's email to determine what they've bought
     email = session['email']
-    cursor = conn.cursor()
+    cursor = conn.cursor()  # add arrival and departure code
     flights_query = '''
     SELECT f.flight_number, f.airline_name, f.departure_date, f.departure_time, f.arrival_time, f.arrival_date, f.base_price, f.flight_status
     FROM purchase p
@@ -558,7 +605,7 @@ def viewFlightRatings():
 def scheduleMaintenance():
     # Get the info that the staff inputs
     airline_name = request.form['airline_name']
-    airplane_id = request.form['airplane_id']
+    airplane_id = request.form['airplane_id']  # add a case where airplane doesn't exist?
     maintenance_start = request.form['start_date']
     maintenance_end = request.form['end_date']
     cursor = conn.cursor()
@@ -577,18 +624,45 @@ def scheduleMaintenance():
 def createFlight():
     # Grab the info the staff enters
     flight_number = request.form['flight_number']
-    airplane_id = request.form['airplane_id']
-    departure_code = request.form['departure_code']
-    arrival_code = request.form['arrival_code']
-    departure_date = request.form['departure_date']
-    departure_time = request.form['departure_time']
-    arrival_date = request.form['arrival_date']
-    arrival_time = request.form['arrival_time']
-    base_price = request.form['base_price']
+    airplane_id = request.form['airplane_id']  # check if airplane exists
+    departure_code = request.form['departure_code']  # check if airport exists
+    arrival_code = request.form['arrival_code']  # check if airport exists -- should prob also check to see if this is diff from departure
+    departure_date = request.form['departure_date']  # check if this date is allowed (a real date?)
+    departure_time = request.form['departure_time']  # check if this time exists -- idk if that's possible to fake
+    arrival_date = request.form['arrival_date']  # check if this date is allowed - after the departure date
+    arrival_time = request.form['arrival_time']  # cehck if this tiem exists
+    base_price = request.form['base_price']  # i assume negative prices would cause errors
     airline_name = session['airline_name']
     # We are going to assume that the flight created starts out on time
     flight_status = 'on_time'
     cursor = conn.cursor()
+    # check to make sure that the airports exist
+    airport_check_query = '''
+        SELECT code FROM airport WHERE code IN (%s, %s)
+    '''
+    cursor.execute(airport_check_query, (departure_code, arrival_code))
+    airports = cursor.fetchall()
+    if len(airports) < 2:  # Both departure and arrival codes must exist
+        cursor.close()
+        missing_airports = []
+        if not any(a['code'] == departure_code for a in airports):
+            missing_airports.append(departure_code)
+        if not any(a['code'] == arrival_code for a in airports):
+            missing_airports.append(arrival_code)
+        error_message = f"The following airports are missing: {', '.join(missing_airports)}. Please add them before creating a flight."
+        return render_template('staffError.html', error_message=error_message)
+
+    # check to make sure airplane exists
+    airplane_check_query = '''
+        SELECT id FROM airplane WHERE id = %s AND airline_name = %s
+    '''
+    cursor.execute(airplane_check_query, (airplane_id, airline_name))
+    airplane = cursor.fetchone()
+    if not airplane:
+        cursor.close()
+        error_message = f"The airplane with ID {airplane_id} does not exist for your airline. Please add it before creating a flight."
+        return render_template('staffError.html', error_message=error_message)
+
     query = '''
         INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     '''
@@ -610,8 +684,7 @@ def createFlight():
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
 # 3) Optionally provide a way to see previous purchased flights
 # Airline Staff
-# 1) Defaults will be showing all the futureflightsoperated by the airline he/she works for the next 30 days.
-#  He/she will be able to see all the current/future/past flights operated by the airline he/she works for based range of dates, source/destination airports/city etc
+# 1)He/she will be able to see all the customers of a particular flight.
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
