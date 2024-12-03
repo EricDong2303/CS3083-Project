@@ -60,7 +60,7 @@ def loginAuthCustomer():
     # cursor used to send queries
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM customer WHERE email = %s and password = %s'
+    query = 'SELECT * FROM customer WHERE email = %s and password = md5(%s)'
     cursor.execute(query, (email, password))
     # stores the results in a variable
     data = cursor.fetchone()
@@ -87,7 +87,7 @@ def loginAuthStaff():
     cursor = conn.cursor()
     # executes query
     query = 'SELECT * FROM airline_staff WHERE \
-             username = %s and password = %s'
+             username = %s and password = md5(%s)'
     cursor.execute(query, (username, password))
     # stores the results in a variable
     data = cursor.fetchone()
@@ -135,7 +135,7 @@ def registerAuthCustomer():
         return render_template('registerCustomer.html', error=error)
     else:
         # Insert the new user into the customer table
-        insert_query = '''INSERT INTO customer VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
         cursor.execute(insert_query, (email, password, first_name, last_name, 
                                       building_number, street_name, apartment_number, 
                                       city, state, zipcode, passport_number, passport_exp, 
@@ -167,7 +167,7 @@ def registerAuthStaff():
         error = "This user already exists"
         return render_template('registerStaff.html', error=error)
     else:
-        ins = 'INSERT INTO airline_staff VALUES (%s, %s, %s, %s, %s, %s)'
+        ins = 'INSERT INTO airline_staff VALUES (%s, %s, md5(%s), %s, %s, %s)'
         cursor.execute(ins, (username, airline_name, password,
                        first_name, last_name, date_of_birth))
         conn.commit()
