@@ -783,9 +783,7 @@ def createFlight():
 
 # Cases Needed To Do
 # Customer:
-# 1) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
-# You may find it easier to implement this along with a use case to search for flights
-# 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months.
+# 1) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months.
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
 
 # General things:
