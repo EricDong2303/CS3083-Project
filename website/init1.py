@@ -1,6 +1,8 @@
 # Import Flask Library
 from flask import Flask, render_template, request, session, url_for, redirect
 import pymysql.cursors
+import datetime
+import uuid
 
 # Initialize the app from Flask
 app = Flask(__name__)
@@ -136,9 +138,10 @@ def registerAuthCustomer():
     else:
         # Insert the new user into the customer table
         insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        cursor.execute(insert_query, (email, password, first_name, last_name, 
-                                      building_number, street_name, apartment_number, 
-                                      city, state, zipcode, passport_number, passport_exp, 
+        cursor.execute(insert_query, (email, password, first_name, last_name,
+                                      building_number, street_name,
+                                      apartment_number, city, state, zipcode,
+                                      passport_number, passport_exp,
                                       passport_country, date_of_birth))
         conn.commit()
         cursor.close()
@@ -188,6 +191,28 @@ def logoutStaff():
     session.pop('username')
     session.pop('airline_name')
     return redirect('/loginStaff')
+
+
+# route for ticket purchase confirmation and collection
+@app.route('/purchaseTicket', methods=['POST'])
+def purchaseTicket():
+    if 'email' not in session:
+        return redirect(url_for('loginCustomer'))
+
+    flight_number = request.form['flight_number']
+    airline_name = request.form['airline_name']
+    departure_date = request.form['departure_date']
+    departure_time = request.form['departure_time']
+    base_price = request.form['base_price']
+
+    return render_template(
+        'purchaseTicket.html',
+        flight_number=flight_number,
+        airline_name=airline_name,
+        departure_date=departure_date,
+        departure_time=departure_time,
+        base_price=base_price
+    )
 
 
 # Route for searching the flights
@@ -271,12 +296,12 @@ def cancelTrip():
     cursor = conn.cursor()
     # Query to make sure the ticket is after current time
     query = '''
-            DELETE FROM purchase 
+            DELETE FROM purchase
             WHERE ticket_id = %s AND
             ticket_id IN (
-                SELECT ticket_id 
+                SELECT ticket_id
                 FROM ticket
-                WHERE ticket_id = %s 
+                WHERE ticket_id = %s
                 AND departure_date > CURDATE()
                 OR (departure_date = CURDATE() AND departure_time > CURTIME())
             )
@@ -334,6 +359,79 @@ def rateFlight():
     cursor.close()
     name = query_customer_name()
     return render_template('homeCustomer.html', name=name, rating_message="Your review has been submitted!")
+
+
+# route for purchasing ticket - and verifying purchase
+@app.route('/authPurchase', methods=['POST'])
+def authPurchase():
+    # collect user info from session and form
+    email = session['email']
+    flight_number = request.form['flight_number']
+    airline_name = request.form['airline_name']
+    base_price = request.form['base_price']
+    departure_time = request.form['departure_time']
+    departure_date = request.form['departure_date']
+    card_type = request.form['card_type']
+    name_on_card = request.form['card_name']
+    card_number = request.form['card_num']
+    card_exp = request.form['exp_date']
+
+    # if there are seats on the plane, then continue with purchase
+    if remainingSeats(flight_number, airline_name):
+        # create ticket id using helper function
+        ticket_id = generate_ticket_id()
+
+        cursor = conn.cursor()
+
+        # fetch purchase time and date - i just did using datetime, i can also use sql
+        purchase_date = datetime.datetime.now().date()
+        purchase_time = datetime.datetime.now().time()
+
+        ticket_insert = '''
+            INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        '''
+        cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
+                                       departure_date, departure_time, base_price,
+                                       card_type, card_number, name_on_card,
+                                       card_exp, purchase_date, purchase_time))
+        purchase_insert = '''
+        INSERT INTO purchase VALUES(%s, %s)
+        '''
+        cursor.execute(purchase_insert, (email, ticket_id))
+
+        conn.commit()
+        cursor.close()
+    else: # give an error message that tells you plane is full
+        return render_template('homeCustomer.html', error="This flight is fully booked. Please select another flight.")
+
+    # should prob add a message that says purchase was successful
+    return render_template('homeCustomer.html',success='You have successfully booked a ticket.')
+
+
+# helper function to create a random unique ticket_id
+def generate_ticket_id():
+    return f"T{uuid.uuid4().hex[:8]}"
+
+
+# helper function to deal with calculating number of seats on the plane
+def remainingSeats(flight_number, airline_name):
+    cursor = conn.cursor()
+    # find total number of seats in the airplane
+
+    seat_num = '''
+    SELECT a.seats - COUNT(t.ticket_id) AS seat_num
+    FROM airplane a
+    JOIN flight f ON f.airline_name = a.airline_name AND f.airplane_id = a.id
+    LEFT JOIN ticket t ON t.flight_number = f.flight_number AND t.airline_name = f.airline_name
+    WHERE f.flight_number = %s AND f.airline_name = %s
+    '''
+    cursor.execute(seat_num, (flight_number, airline_name))
+    remaining_seats = cursor.fetchone()
+    cursor.close()
+    if remaining_seats['seat_num'] > 0:
+        return True
+    return False
+
 
 
 # Route for showing the amount of money the customer has spent. Customer will enter a date range and result will be shown
@@ -701,7 +799,7 @@ def createFlight():
 # Customer:
 # 1) Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the needed data, via forms.
 # You may find it easier to implement this along with a use case to search for flights
-# 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months. 
+# 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months.
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
 # 3) Optionally provide a way to see previous purchased flights
 

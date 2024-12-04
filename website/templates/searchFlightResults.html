@@ -43,6 +43,21 @@
                 <td>{{ flight['arrival_date'] }}</td>
                 <td>{{ flight['arrival_time'] }}</td>
                 <td>${{ flight['base_price'] }}</td>
+                <td>
+                    {% if session.get('email') %}
+                        <!-- Customer logged in: Show purchase button -->
+                        <form action="/purchaseTicket" method="POST">
+                            <input type="hidden" name="flight_number" value="{{ flight['flight_number'] }}">
+                            <input type="hidden" name="airline_name" value="{{ flight['airline_name'] }}">
+                            <input type="hidden" name="departure_date" value="{{ flight['departure_date'] }}">
+                            <input type="hidden" name="departure_time" value="{{ flight['departure_time'] }}">
+                            <input type="hidden" name="base_price" value="{{ flight['base_price'] }}">
+                            <input type="submit" value="Purchase Flight">
+                        </form>
+                    {% else %}
+                        <p><a href="/loginCustomer">Log in to purchase</a></p>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </table>

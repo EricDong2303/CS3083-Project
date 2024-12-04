@@ -5,6 +5,18 @@
 <body>
 	<h1>Welcome {{name}}!</h1>
 
+    {% if success %}
+        <div style="color: blue; font-weight: bold;">
+            {{ success }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div style="color: red; font-weight: bold;">
+            {{ error }}
+        </div>
+    {% endif %}
+
     <h2>View My Flights</h2>
     <form action="/viewFlight" method="POST">
         <input type="submit" value="View My Flights">

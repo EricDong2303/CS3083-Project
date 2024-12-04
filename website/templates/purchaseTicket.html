@@ -1,18 +1,25 @@
-<body>
-    <h1>Purchase Tickets</h1>
-    <form action="/AuthPurchase" method="POST">
+<html>
+    <head>
+        <title>Purchase Ticket</title>
+    </head>
+    <body>
+        <h1>Confirm Your Purchase</h1>
+        <p>Flight Number: {{ flight_number }}</p>
+        <p>Airline: {{ airline_name }}</p>
+        <p>Departure Date: {{ departure_date }}</p>
+        <p>Departure Time: {{ departure_time }}</p>
+        <p>Price: ${{ base_price }}</p>
+
+    <form action="/authPurchase" method="POST">
+            <input type="hidden" name="flight_number" value="{{ flight_number }}">
+            <input type="hidden" name="airline_name" value="{{ airline_name }}">
+            <input type="hidden" name="departure_date" value="{{ departure_date }}">
+            <input type="hidden" name="departure_time" value="{{ departure_time }}">
+            <input type="hidden" name="base_price" value="{{ base_price }}">
+            
             <h2>Customer Information</h2>
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" required><br>
-
-            <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" required><br>
-
-            <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" required><br>
-
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" name="dob" required><br>
 
             <h2>Payment Information</h2>
             <label for="card_type">Card Type:</label>
