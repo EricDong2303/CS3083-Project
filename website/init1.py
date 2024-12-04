@@ -62,7 +62,7 @@ def loginAuthCustomer():
     # cursor used to send queries
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM customer WHERE email = %s and password = md5(%s)'
+    query = '''SELECT * FROM customer WHERE email = %s and password = md5(%s)'''
     cursor.execute(query, (email, password))
     # stores the results in a variable
     data = cursor.fetchone()
@@ -88,8 +88,8 @@ def loginAuthStaff():
     # cursor used to send queries
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM airline_staff WHERE \
-             username = %s and password = md5(%s)'
+    query = '''SELECT * FROM airline_staff WHERE \
+            username = %s and password = md5(%s)'''
     cursor.execute(query, (username, password))
     # stores the results in a variable
     data = cursor.fetchone()
@@ -127,7 +127,7 @@ def registerAuthCustomer():
     date_of_birth = request.form['date_of_birth']
     cursor = conn.cursor()
     # Check if the user already exists
-    query = 'SELECT * FROM customer WHERE email = %s'
+    query = '''SELECT * FROM customer WHERE email = %s'''
     cursor.execute(query, (email))
     data = cursor.fetchone()
     error = None
@@ -161,7 +161,7 @@ def registerAuthStaff():
     date_of_birth = request.form['date_of_birth']
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM airline_staff WHERE username = %s'
+    query = '''SELECT * FROM airline_staff WHERE username = %s'''
     cursor.execute(query, (username))
     data = cursor.fetchone()
     error = None
@@ -170,7 +170,7 @@ def registerAuthStaff():
         error = "This user already exists"
         return render_template('registerStaff.html', error=error)
     else:
-        ins = 'INSERT INTO airline_staff VALUES (%s, %s, md5(%s), %s, %s, %s)'
+        ins = '''INSERT INTO airline_staff VALUES (%s, %s, md5(%s), %s, %s, %s)'''
         cursor.execute(ins, (username, airline_name, password,
                        first_name, last_name, date_of_birth))
         conn.commit()
@@ -232,7 +232,6 @@ def searchFlights():
     '''
     cursor.execute(outbound_query, (destination, source, departure_date))
     outbound_flights = cursor.fetchall()
-
     # return_date if it's provided
     return_flights = None
     if return_date:
@@ -244,7 +243,6 @@ def searchFlights():
         # for returns, the we're departing from the destination and returning to the source
         cursor.execute(return_query, (destination, source, return_date))
         return_flights = cursor.fetchall()
-
     cursor.close()
     # Brings the customer to this page where it will show results
     return render_template(
@@ -259,7 +257,7 @@ def searchFlights():
 def query_customer_name():
     email = session['email']
     cursor = conn.cursor()
-    query = 'SELECT first_name FROM customer WHERE email = %s'
+    query = '''SELECT first_name FROM customer WHERE email = %s'''
     cursor.execute(query, (email,))
     customer_data = cursor.fetchone()
     name = customer_data['first_name']
@@ -319,7 +317,8 @@ def cancelTrip():
             DELETE FROM ticket
             WHERE ticket_id = %s
             AND departure_date > CURDATE()
-            OR (departure_date = CURDATE() AND departure_time > CURTIME())'''
+            OR (departure_date = CURDATE() AND departure_time > CURTIME())
+        '''
     cursor.execute(query, (ticket_id))
     conn.commit()
     cursor.close()
@@ -484,8 +483,7 @@ def addAirport():
     type = request.form['type']
     # Do the query
     cursor = conn.cursor()
-    query = '''
-        INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
+    query = '''INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
     cursor.execute(query, (code, name, city, country, number_of_terminals, type))
     conn.commit()
     cursor.close()
@@ -524,7 +522,6 @@ def staffViewFlight():
     end_date = request.form['end_date']
     source = request.form['source']
     destination = request.form['destination']
-
     cursor = conn.cursor()
     default_query = '''
     SELECT flight_number, arrival_code, departure_code, departure_date, departure_time, arrival_time, arrival_date, base_price, flight_status
@@ -708,9 +705,7 @@ def scheduleMaintenance():
     maintenance_end = request.form['end_date']
     cursor = conn.cursor()
     # Do the SQL insert with the data provided
-    query = '''
-        INSERT INTO maintenance VALUES (%s, %s, %s, %s)
-    '''
+    query = '''INSERT INTO maintenance VALUES (%s, %s, %s, %s)'''
     cursor.execute(query, (airplane_id, airline_name, maintenance_start, maintenance_end))
     conn.commit()
     cursor.close()
@@ -722,7 +717,6 @@ def scheduleMaintenance():
 def viewRoster():
     airline_name = session['airline_name']
     flight_number = request.form['flight_number']
-
     cursor = conn.cursor()
     query = '''
     SELECT c.first_name, c.last_name, c.email, t.ticket_id
@@ -731,7 +725,6 @@ def viewRoster():
     JOIN customer c on c.email = p.email
     WHERE t.airline_name = %s AND t.flight_number = %s
     '''
-
     cursor.execute(query, (airline_name, flight_number))
     customer_info = cursor.fetchall()
     cursor.close()
@@ -756,9 +749,7 @@ def createFlight():
     flight_status = 'on_time'
     cursor = conn.cursor()
     # check to make sure that the airports exist
-    airport_check_query = '''
-        SELECT code FROM airport WHERE code IN (%s, %s)
-    '''
+    airport_check_query = '''SELECT code FROM airport WHERE code IN (%s, %s)'''
     cursor.execute(airport_check_query, (departure_code, arrival_code))
     airports = cursor.fetchall()
     if len(airports) < 2:  # Both departure and arrival codes must exist
@@ -770,11 +761,8 @@ def createFlight():
             missing_airports.append(arrival_code)
         error_message = f"The following airports are missing: {', '.join(missing_airports)}. Please add them before creating a flight."
         return render_template('staffError.html', error_message=error_message)
-
     # check to make sure airplane exists
-    airplane_check_query = '''
-        SELECT id FROM airplane WHERE id = %s AND airline_name = %s
-    '''
+    airplane_check_query = '''SELECT id FROM airplane WHERE id = %s AND airline_name = %s'''
     cursor.execute(airplane_check_query, (airplane_id, airline_name))
     airplane = cursor.fetchone()
     if not airplane:
@@ -782,9 +770,7 @@ def createFlight():
         error_message = f"The airplane with ID {airplane_id} does not exist for your airline. Please add it before creating a flight."
         return render_template('staffError.html', error_message=error_message)
 
-    query = '''
-        INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    '''
+    query = '''INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
     cursor.execute(query, (
             flight_number, airline_name, arrival_code, departure_code, airplane_id,
             departure_date, departure_time, flight_status,
@@ -801,7 +787,6 @@ def createFlight():
 # You may find it easier to implement this along with a use case to search for flights
 # 2) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months.
 # Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
-# 3) Optionally provide a way to see previous purchased flights
 
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
