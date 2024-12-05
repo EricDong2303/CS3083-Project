@@ -17,6 +17,7 @@
                     <th>Arrival Time</th>
                     <th>Status</th>
                     <th>Base Price</th>
+                    <th>Ticket ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                         <td>{{ flight['arrival_time'] }}</td>
                         <td>{{ flight['flight_status'] }}</td>
                         <td>${{ flight['base_price'] }}</td>
+                        <td>{{ flight['ticket_id'] }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

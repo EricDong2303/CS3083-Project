@@ -593,7 +593,7 @@ def viewFlight():
     email = session['email']
     cursor = conn.cursor()  # add arrival and departure code
     flights_query = '''
-    SELECT f.flight_number, f.airline_name, f.departure_date, f.departure_time, f.arrival_time, f.arrival_date, f.base_price, f.flight_status
+    SELECT f.flight_number, f.airline_name, f.departure_date, f.departure_time, f.arrival_time, f.arrival_date, f.base_price, f.flight_status, t.ticket_id
     FROM purchase p
     JOIN ticket t ON p.ticket_id = t.ticket_id
     JOIN flight f ON f.flight_number = t.flight_number
