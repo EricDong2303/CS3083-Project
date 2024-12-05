@@ -452,7 +452,7 @@ def viewRevenue():
         FROM ticket
         WHERE airline_name = %s
         AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY) - INTERVAL 1 MONTH
-        AND purchase_date < DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY);
+        AND purchase_date < DATE_SUB(CURDATE(), INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY)
     '''
     cursor.execute(last_month_query, (airline_name,))
     last_month_rev = cursor.fetchone()['total_revenue'] or 0
@@ -462,7 +462,7 @@ def viewRevenue():
         FROM ticket
         WHERE airline_name = %s
         AND purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
-        AND purchase_date < CURDATE();
+        AND purchase_date < CURDATE()
     '''
     cursor.execute(last_year_query, (airline_name,))
     last_year_rev = cursor.fetchone()['total_revenue'] or 0
@@ -569,7 +569,7 @@ def viewFlight():
     FROM purchase p
     JOIN ticket t ON p.ticket_id = t.ticket_id
     JOIN flight f ON f.flight_number = t.flight_number
-    WHERE p.email = %s AND f.departure_time <= NOW();
+    WHERE p.email = %s AND f.departure_time <= NOW()
     '''
     cursor.execute(flights_query, (email))
     flights = cursor.fetchall()
@@ -642,23 +642,21 @@ def viewCustomer():
     customer_name_query = '''
         SELECT first_name, last_name
         FROM customer
-        WHERE email = %s;
+        WHERE email = %s
     '''
     cursor.execute(customer_name_query, (email,))
     customer = cursor.fetchone()
-
     if not customer:
         error = "Customer not found."
         cursor.close()
         return render_template('viewCustomer.html', error=error)
-
     # query to get flight info
     flight_info_query = '''
         SELECT f.flight_number, f.departure_date, f.arrival_date, f.departure_code, f.arrival_code
         FROM purchase p
         JOIN ticket t ON p.ticket_id = t.ticket_id
         JOIN flight f ON t.flight_number = f.flight_number AND t.airline_name = f.airline_name
-        WHERE p.email = %s AND f.airline_name = %s;
+        WHERE p.email = %s AND f.airline_name = %s
     '''
     cursor.execute(flight_info_query, (email, airline_name))
     flights = cursor.fetchall()
@@ -769,7 +767,6 @@ def createFlight():
         cursor.close()
         error_message = f"The airplane with ID {airplane_id} does not exist for your airline. Please add it before creating a flight."
         return render_template('staffError.html', error_message=error_message)
-
     query = '''INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
     cursor.execute(query, (
             flight_number, airline_name, arrival_code, departure_code, airplane_id,
