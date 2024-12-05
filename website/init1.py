@@ -137,16 +137,20 @@ def registerAuthCustomer():
         return render_template('registerCustomer.html', error=error)
     else:
         # Insert the new user into the customer table
-        insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        cursor.execute(insert_query, (email, password, first_name, last_name,
+        try:
+            insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+            cursor.execute(insert_query, (email, password, first_name, last_name,
                                       building_number, street_name,
                                       apartment_number, city, state, zipcode,
                                       passport_number, passport_exp,
                                       passport_country, date_of_birth))
-        conn.commit()
-        cursor.close()
-        # Redirect to home page after successful registration, customer will now log in using their login credentials
-        return render_template('loginCustomer.html')
+            conn.commit()
+            cursor.close()
+            # Redirect to home page after successful registration, customer will now log in using their login credentials
+            return render_template('loginCustomer.html')
+        except:
+            error = "One or more fields are incorrect. Please reenter your information"
+            return render_template('registerCustomer.html', error=error)
 
 
 # Authenticates the register for staff
@@ -170,12 +174,16 @@ def registerAuthStaff():
         error = "This user already exists"
         return render_template('registerStaff.html', error=error)
     else:
-        ins = '''INSERT INTO airline_staff VALUES (%s, %s, md5(%s), %s, %s, %s)'''
-        cursor.execute(ins, (username, airline_name, password,
-                       first_name, last_name, date_of_birth))
-        conn.commit()
-        cursor.close()
-        return render_template('loginStaff.html')
+        try:
+            ins = '''INSERT INTO airline_staff VALUES (%s, %s, md5(%s), %s, %s, %s)'''
+            cursor.execute(ins, (username, airline_name, password,
+                        first_name, last_name, date_of_birth))
+            conn.commit()
+            cursor.close()
+            return render_template('loginStaff.html')
+        except:
+            error = "One or more fields are incorrect. Please reenter your information"
+            return render_template('registerStaff.html', error=error)
 
 
 # Define route of customer logout
@@ -351,13 +359,18 @@ def rateFlight():
     flight_number = ticket['flight_number']
     departure_date = ticket['departure_date']
     departure_time = ticket['departure_time']
-    # Insert into review table after info was retrieved
-    review_post = '''INSERT INTO review VALUES(%s, %s, %s, %s, %s, %s, %s)'''
-    cursor.execute(review_post, (email, flight_number, airline_name, departure_date, departure_time, rating, comment))
-    conn.commit()
-    cursor.close()
-    name = query_customer_name()
-    return render_template('homeCustomer.html', name=name, rating_message="Your review has been submitted!")
+    try:
+        # Insert into review table after info was retrieved
+        review_post = '''INSERT INTO review VALUES(%s, %s, %s, %s, %s, %s, %s)'''
+        cursor.execute(review_post, (email, flight_number, airline_name, departure_date, departure_time, rating, comment))
+        conn.commit()
+        cursor.close()
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name, rating_message="Your review has been submitted!")
+    except:
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name, rating_message="Please shorten the length of your review")
+
 
 
 # route for purchasing ticket - and verifying purchase
