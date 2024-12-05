@@ -1,0 +1,29 @@
+
+<html>
+<head>
+</head>
+<body>
+    <h1>Track your spending</h1>
+    <table border="1">
+        <tr>
+            <th>Time Period</th>
+            <th>Total Spending ($)</th>
+        </tr>
+        <tr>
+            <td>Past 6 Months</td>
+            <td>{{ past_6months_spent }}</td>
+        </tr>
+        <tr>
+            <td>Past Year</td>
+            <td>{{ past_year_spent }}</td>
+        </tr>
+        {% if choose_range is not none %}
+        <tr>
+            <td>From {{ start_date }} to {{ end_date }}</td>
+            <td>{{ choose_range }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    <a href="/home"><button>Go Back</button></a>
+</body>
+</html>

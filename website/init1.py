@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3306, # 3307 or 3306 depending on who's using it
+                       port=3307, # 3307 or 3306 depending on who's using it
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -392,9 +392,11 @@ def authPurchase():
         conn.commit()
         cursor.close()
     else: # give an error message that tells you plane is full
-        return render_template('homeCustomer.html', error="This flight is fully booked. Please select another flight.")
+        name = query_customer_name()
+        return render_template('homeCustomer.html', error="This flight is fully booked. Please select another flight.", name=name)
     # should prob add a message that says purchase was successful
-    return render_template('homeCustomer.html',success='You have successfully booked a ticket.')
+    name = query_customer_name()
+    return render_template('homeCustomer.html',success='You have successfully booked a ticket.', name=name)
 
 
 # helper function to create a random unique ticket_id
@@ -425,7 +427,44 @@ def remainingSeats(flight_number, airline_name):
 # Route for showing the amount of money the customer has spent. Customer will enter a date range and result will be shown
 @app.route('/trackSpending', methods=['POST'])
 def trackSpending():
-    pass
+    email = session['email']
+    cursor = conn.cursor()
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    # Query for customer spending in the past 6 months
+    past_6months_query = '''
+        SELECT SUM(t.ticket_price) AS total_spent
+        FROM ticket t
+        JOIN purchase p ON t.ticket_id = p.ticket_id
+        WHERE p.email = %s AND t.purchase_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+    '''
+    cursor.execute(past_6months_query, (email,))
+    past_6months_spent = cursor.fetchone()['total_spent'] or 0
+    # query for total spent in the past year
+    past_year_query = '''
+        SELECT SUM(t.ticket_price) AS total_spent
+        FROM ticket t
+        JOIN purchase p ON t.ticket_id = p.ticket_id
+        WHERE p.email = %s AND t.purchase_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+    '''
+    cursor.execute(past_year_query, (email,))
+    past_year_spent = cursor.fetchone()['total_spent'] or 0
+    choose_range = None
+    # If the customer enters a start and end date, then we do an extra query
+    if start_date and end_date:
+        # Query for the specific date customer asks for 
+        query = '''
+            SELECT SUM(t.ticket_price) AS total_spent
+            FROM ticket t
+            JOIN purchase p ON t.ticket_id = p.ticket_id
+            WHERE p.email = %s AND t.purchase_date BETWEEN %s AND %s
+        '''
+        cursor.execute(query, (email, start_date, end_date))
+        choose_range = cursor.fetchone()['total_spent'] or 0
+    cursor.close()
+    # Bring customer to a new page and show them a table of their spend
+    return render_template('trackSpending.html', past_6months_spent=past_6months_spent, past_year_spent=past_year_spent,
+        choose_range=choose_range, start_date=start_date, end_date=end_date)
 
 
 # Route to let the airline staff see how much revenue was earned in the last month/year.
@@ -767,20 +806,13 @@ def createFlight():
     return redirect(url_for('staffHome'))
 
 
-# Cases Needed To Do
-# Customer:
-# 1) Track My Spending: View of total  money spent in the past year and a barchart/table showing month wise money spent for last 6 months.
-# Have option to specify range of dates to view total money spent within that range and a bar chart/table showing month wisemoney spent within that range
-
 # General things:
 # 1) measures to prevent cross-site scripting vulnerabilities (if we haven't already)
 # should use the function thing dey mentioned that cleans text
-
 # 2) other prevention included in Enforcing complex constraints (if we haven't already)
 
 
 app.secret_key = 'some key that you will never guess'
-
 # Run the app on localhost port 5000
 debug = True  # -> you don't have to restart flask
 # for changes to go through, TURN OFF FOR PRODUCTION
