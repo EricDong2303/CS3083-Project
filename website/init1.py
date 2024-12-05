@@ -374,35 +374,25 @@ def authPurchase():
     name_on_card = request.form['card_name']
     card_number = request.form['card_num']
     card_exp = request.form['exp_date']
-
     # if there are seats on the plane, then continue with purchase
     if remainingSeats(flight_number, airline_name):
         # create ticket id using helper function
         ticket_id = generate_ticket_id()
-
         cursor = conn.cursor()
-
         # fetch purchase time and date - i just did using datetime, i can also use sql
         purchase_date = datetime.datetime.now().date()
         purchase_time = datetime.datetime.now().time()
-
-        ticket_insert = '''
-            INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        '''
+        ticket_insert = '''INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
         cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
                                        departure_date, departure_time, base_price,
                                        card_type, card_number, name_on_card,
                                        card_exp, purchase_date, purchase_time))
-        purchase_insert = '''
-        INSERT INTO purchase VALUES(%s, %s)
-        '''
+        purchase_insert = '''INSERT INTO purchase VALUES(%s, %s)'''
         cursor.execute(purchase_insert, (email, ticket_id))
-
         conn.commit()
         cursor.close()
     else: # give an error message that tells you plane is full
         return render_template('homeCustomer.html', error="This flight is fully booked. Please select another flight.")
-
     # should prob add a message that says purchase was successful
     return render_template('homeCustomer.html',success='You have successfully booked a ticket.')
 
@@ -430,7 +420,6 @@ def remainingSeats(flight_number, airline_name):
     if remaining_seats['seat_num'] > 0:
         return True
     return False
-
 
 
 # Route for showing the amount of money the customer has spent. Customer will enter a date range and result will be shown
