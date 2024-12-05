@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3307, # 3307 or 3306 depending on who's using it
+                       port=3306, # 3307 or 3306 depending on who's using it
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -383,14 +383,18 @@ def authPurchase():
         purchase_date = datetime.datetime.now().date()
         purchase_time = datetime.datetime.now().time()
         ticket_insert = '''INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
-                                       departure_date, departure_time, base_price,
-                                       card_type, card_number, name_on_card,
-                                       card_exp, purchase_date, purchase_time))
-        purchase_insert = '''INSERT INTO purchase VALUES(%s, %s)'''
-        cursor.execute(purchase_insert, (email, ticket_id))
-        conn.commit()
-        cursor.close()
+        try:
+            cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
+                                        departure_date, departure_time, base_price,
+                                        card_type, card_number, name_on_card,
+                                        card_exp, purchase_date, purchase_time))
+            purchase_insert = '''INSERT INTO purchase VALUES(%s, %s)'''
+            cursor.execute(purchase_insert, (email, ticket_id))
+            conn.commit()
+            cursor.close()
+        except:
+            name = query_customer_name()
+            return render_template('homeCustomer.html', error="One or more fields of information have invalid information. Please reenter your information.", name=name)
     else: # give an error message that tells you plane is full
         name = query_customer_name()
         return render_template('homeCustomer.html', error="This flight is fully booked. Please select another flight.", name=name)
