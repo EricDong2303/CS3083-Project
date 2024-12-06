@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3307, # 3307 or 3306 depending on who's using it
+                       port=3306, # 3307 or 3306 depending on who's using it
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -206,13 +206,11 @@ def logoutStaff():
 def purchaseTicket():
     if 'email' not in session:
         return redirect(url_for('loginCustomer'))
-
     flight_number = request.form['flight_number']
     airline_name = request.form['airline_name']
     departure_date = request.form['departure_date']
     departure_time = request.form['departure_time']
     base_price = request.form['base_price']
-
     return render_template(
         'purchaseTicket.html',
         flight_number=flight_number,
@@ -441,7 +439,6 @@ def generate_ticket_id():
 def remainingSeats(flight_number, airline_name):
     cursor = conn.cursor()
     # find total number of seats in the airplane
-
     seat_num = '''
     SELECT a.seats - COUNT(t.ticket_id) AS seat_num
     FROM airplane a
@@ -608,17 +605,14 @@ def staffViewFlight():
     else:
         default_query += " AND departure_date <= %s"
         filters.append(end_date)
-
     # if source is given, use it to filter query
     if source:
         default_query += " AND departure_code = %s"
         filters.append(source)
-
     # if destination airport is given, use to filter query
     if destination:
         default_query += " AND arrival_code = %s"
         filters.append(destination)
-
     cursor.execute(default_query, filters)
     flights = cursor.fetchall()
     cursor.close()
