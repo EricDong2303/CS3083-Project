@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configure MySQL, port 3307 is my MariaDB
 conn = pymysql.connect(host='localhost',
-                       port=3306, # 3307 or 3306 depending on who's using it
+                       port=3307, # 3307 or 3306 depending on who's using it
                        user='root',
                        password='',
                        db='air_ticket_reservation_system',
@@ -632,7 +632,8 @@ def viewFlight():
     FROM purchase p
     JOIN ticket t ON p.ticket_id = t.ticket_id
     JOIN flight f ON f.flight_number = t.flight_number
-    WHERE p.email = %s AND f.departure_time <= NOW()
+    WHERE p.email = %s AND (f.departure_date > CURDATE() OR (f.departure_date = CURDATE() AND f.departure_time > CURTIME()))
+
     '''
     cursor.execute(flights_query, (email))
     flights = cursor.fetchall()
