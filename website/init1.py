@@ -149,7 +149,7 @@ def registerAuthCustomer():
             # Redirect to home page after successful registration, customer will now log in using their login credentials
             return render_template('loginCustomer.html')
         except:
-            error = "One or more fields are incorrect. Please reenter your information"
+            error = "One or more fields are invalid. Please reenter your information"
             return render_template('registerCustomer.html', error=error)
 
 
@@ -182,7 +182,7 @@ def registerAuthStaff():
             cursor.close()
             return render_template('loginStaff.html')
         except:
-            error = "One or more fields are incorrect. Please reenter your information"
+            error = "One or more fields are invalid. Please reenter your information"
             return render_template('registerStaff.html', error=error)
 
 
@@ -548,7 +548,7 @@ def addAirport():
         cursor.close()
         return redirect(url_for('staffHome'))
     except:
-        return render_template('homeStaff.html', error="One or more fields in adding airport were incorrect. Please reenter your information.")
+        return render_template('homeStaff.html', error="One or more fields in adding airport were invalid. Please reenter your information.")
 
 
 # Route for staff to be able to add an airplane into the system, does not change the page for staff but updates the database
@@ -573,7 +573,7 @@ def addAirplane():
         cursor.close()
         return redirect(url_for('staffHome'))
     except:
-        return render_template('homeStaff.html', error="One or more fields in adding airplane were incorrect. Please reenter your information.")
+        return render_template('homeStaff.html', error="One or more fields in adding airplane were invalid. Please reenter your information.")
 
 
 # Route for staff to view future flights (or past flights)
@@ -772,7 +772,7 @@ def scheduleMaintenance():
         cursor.close()
         return redirect(url_for('staffHome'))
     except:
-        return render_template('homeStaff.html', error="One or more fields in scheduling maintenance were incorrect. Please reenter your information.")
+        return render_template('homeStaff.html', error="One or more fields in scheduling maintenance were invalid. Please reenter your information.")
 
 
 # route for airline staff to view customers on a given flight
@@ -818,6 +818,9 @@ def createFlight():
     if len(airports) < 2:  # Both departure and arrival codes must exist
         cursor.close()
         missing_airports = []
+        if any(a['code'] == departure_code for a in airports) and any(a['code'] == arrival_code for a in airports):
+            error_message = f"The airports cannot be the same"
+            return render_template('staffError.html', error_message=error_message)
         if not any(a['code'] == departure_code for a in airports):
             missing_airports.append(departure_code)
         if not any(a['code'] == arrival_code for a in airports):
@@ -832,15 +835,19 @@ def createFlight():
         cursor.close()
         error_message = f"The airplane with ID {airplane_id} does not exist for your airline. Please add it before creating a flight."
         return render_template('staffError.html', error_message=error_message)
-    query = '''INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-    cursor.execute(query, (
-            flight_number, airline_name, arrival_code, departure_code, airplane_id,
-            departure_date, departure_time, flight_status,
-            arrival_date, arrival_time, base_price
-        ))
-    conn.commit()
-    cursor.close()
-    return redirect(url_for('staffHome'))
+    try:
+        query = '''INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (
+                flight_number, airline_name, arrival_code, departure_code, airplane_id,
+                departure_date, departure_time, flight_status,
+                arrival_date, arrival_time, base_price
+            ))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        error_message = "One or more fields are invalid. Please reenter your information"
+        return render_template('staffError.html', error_message=error_message)
 
 
 # General things:
