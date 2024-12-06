@@ -138,7 +138,7 @@ def registerAuthCustomer():
     else:
         # Insert the new user into the customer table
         try:
-            insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+            insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
             cursor.execute(insert_query, (email, password, first_name, last_name,
                                       building_number, street_name,
                                       apartment_number, city, state, zipcode,
@@ -410,7 +410,7 @@ def authPurchase():
         # fetch purchase time and date - i just did using datetime, i can also use sql
         purchase_date = datetime.datetime.now().date()
         purchase_time = datetime.datetime.now().time()
-        ticket_insert = '''INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        ticket_insert = '''INSERT INTO ticket VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
         try:
             cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
                                         departure_date, departure_time, base_price,
