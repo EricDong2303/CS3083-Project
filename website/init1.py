@@ -302,6 +302,25 @@ def cancelTrip():
     cursor = conn.cursor()
     # Query to make sure the ticket is after current time
     query = '''
+            SELECT * FROM purchase
+            WHERE ticket_id = %s AND
+            ticket_id IN (
+                SELECT ticket_id
+                FROM ticket
+                WHERE ticket_id = %s
+                AND departure_date > CURDATE()
+                OR (departure_date = CURDATE() AND departure_time > CURTIME())
+            )
+        '''
+    cursor.execute(query, (ticket_id, ticket_id))
+    data = cursor.fetchone()
+    # Shows error if customer does not have the ticket
+    if not data:
+        cursor.close()
+        name = query_customer_name()
+        return render_template('homeCustomer.html', name=name, cancel_error="Invalid ticket ID or ticket not found. Can not cancel.")
+    # query to delete the ticket
+    query = '''
             DELETE FROM purchase
             WHERE ticket_id = %s AND
             ticket_id IN (
@@ -314,13 +333,6 @@ def cancelTrip():
         '''
     cursor.execute(query, (ticket_id, ticket_id))
     conn.commit()
-    check = cursor.fetchone()
-    # Shows error if customer does not have the ticket
-    if not check:
-        cursor.close()
-        name = query_customer_name()
-        return render_template('homeCustomer.html', name=name, cancel_error="Invalid ticket ID or ticket not found. Can not cancel.")
-    # query to delete the ticket
     query = '''
             DELETE FROM ticket
             WHERE ticket_id = %s
