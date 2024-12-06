@@ -369,6 +369,10 @@ def rateFlight():
     flight_number = ticket['flight_number']
     departure_date = ticket['departure_date']
     departure_time = ticket['departure_time']
+    if (datetime.datetime.now().date() < departure_date):
+        return render_template('homeCustomer.html', name=name, rating_error="You cannot review a flight before it has departed.")
+    if (datetime.datetime.now().time() < departure_time and datetime.datetime.now().date() == departure_date):
+        return render_template('homeCustomer.html', name=name, rating_error="You cannot review a flight before it has departed.")
     try:
         # Insert into review table after info was retrieved
         review_post = '''INSERT INTO review VALUES(%s, %s, %s, %s, %s, %s, %s)'''
@@ -759,7 +763,7 @@ def viewFlightRatings():
 @app.route('/scheduleMaintenance', methods=['POST'])
 def scheduleMaintenance():
     # Get the info that the staff inputs
-    airline_name = request.form['airline_name']
+    airline_name = session["airline_name"]
     airplane_id = request.form['airplane_id']  # add a case where airplane doesn't exist?
     maintenance_start = request.form['start_date']
     maintenance_end = request.form['end_date']
