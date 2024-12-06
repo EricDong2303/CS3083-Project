@@ -138,7 +138,7 @@ def registerAuthCustomer():
     else:
         # Insert the new user into the customer table
         try:
-            insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+            insert_query = '''INSERT INTO customer VALUES (%s, md5(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
             cursor.execute(insert_query, (email, password, first_name, last_name,
                                       building_number, street_name,
                                       apartment_number, city, state, zipcode,
