@@ -399,6 +399,9 @@ def authPurchase():
     name_on_card = request.form['card_name']
     card_number = request.form['card_num']
     card_exp = request.form['exp_date']
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    dob = request.form['dob']
     # if there are seats on the plane, then continue with purchase
     if remainingSeats(flight_number, airline_name):
         # create ticket id using helper function
@@ -412,7 +415,8 @@ def authPurchase():
             cursor.execute(ticket_insert, (ticket_id, flight_number, airline_name,
                                         departure_date, departure_time, base_price,
                                         card_type, card_number, name_on_card,
-                                        card_exp, purchase_date, purchase_time))
+                                        card_exp, purchase_date, purchase_time,
+                                        first_name, last_name, dob))
             purchase_insert = '''INSERT INTO purchase VALUES(%s, %s)'''
             cursor.execute(purchase_insert, (email, ticket_id))
             conn.commit()

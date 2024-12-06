@@ -83,6 +83,10 @@ CREATE TABLE ticket(
 	card_exp DATE NOT NULL,
 	purchase_date DATE NOT NULL,
 	purchase_time TIME NOT NULL,
+	first_name VARCHAR(100) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	dob VARCHAR(100) NOT NULL,
+
 	PRIMARY KEY(ticket_id),
 	FOREIGN KEY(flight_number, airline_name, departure_date, departure_time) REFERENCES flight(flight_number, airline_name, departure_date, departure_time)
 );
