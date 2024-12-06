@@ -5,6 +5,10 @@
 <body>
 	<h1>Welcome, {{username}}!</h1>
 
+        {% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+        {% endif %}
+
     <h2>View Flights</h2>
     <form action="/staffViewFlight" method="POST">
         <label for="date_range">Date Range:</label>

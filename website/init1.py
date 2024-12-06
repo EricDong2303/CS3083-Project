@@ -528,11 +528,14 @@ def addAirport():
     type = request.form['type']
     # Do the query
     cursor = conn.cursor()
-    query = '''INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
-    cursor.execute(query, (code, name, city, country, number_of_terminals, type))
-    conn.commit()
-    cursor.close()
-    return redirect(url_for('staffHome'))
+    try:
+        query = '''INSERT INTO airport VALUES (%s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (code, name, city, country, number_of_terminals, type))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        return render_template('homeStaff.html', error="One or more fields in adding airport were incorrect. Please reenter your information.")
 
 
 # Route for staff to be able to add an airplane into the system, does not change the page for staff but updates the database
@@ -551,10 +554,13 @@ def addAirplane():
         INSERT INTO airplane (id, airline_name, seats, company, model_number, manufacture_date)
         VALUES (%s, %s, %s, %s, %s, %s)
     '''
-    cursor.execute(query, (airplane_id, airline_name, seats, company, model_number, manufacture_date))
-    conn.commit()
-    cursor.close()
-    return redirect(url_for('staffHome'))
+    try:
+        cursor.execute(query, (airplane_id, airline_name, seats, company, model_number, manufacture_date))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        return render_template('homeStaff.html', error="One or more fields in adding airplane were incorrect. Please reenter your information.")
 
 
 # Route for staff to view future flights (or past flights)
@@ -749,10 +755,13 @@ def scheduleMaintenance():
     cursor = conn.cursor()
     # Do the SQL insert with the data provided
     query = '''INSERT INTO maintenance VALUES (%s, %s, %s, %s)'''
-    cursor.execute(query, (airplane_id, airline_name, maintenance_start, maintenance_end))
-    conn.commit()
-    cursor.close()
-    return redirect(url_for('staffHome'))
+    try:
+        cursor.execute(query, (airplane_id, airline_name, maintenance_start, maintenance_end))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        return render_template('homeStaff.html', error="One or more fields in scheduling maintenance were incorrect. Please reenter your information.")
 
 
 # route for airline staff to view customers on a given flight
