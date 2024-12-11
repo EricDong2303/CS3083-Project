@@ -50,6 +50,44 @@ VALUES ('user3@nyu.edu', '81dc9bdb52d04dc20036dbd8313ed055', 'Trudy', 'Jones', 1
 INSERT INTO customer_phone (phone_number, email) VALUES (12343244324, 'testcustomer@nyu.edu');
 
 INSERT INTO flight 
-(airline_name, flight_number, departure_date, departure_time, airplane_id, arrival_time, arrival_date, base_price, flight_status, departure_code, arrival_code) 
-VALUES ('Jet Blue', 'JB111', '2024-12-01', '08:00:00', 'JB111', '11:30:00', '2024-12-01', 300, 'on_time', 'JFK', 'PVG');
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 102, 'SFO', '2024-09-20', '13:25:25', 'LAX', '2024-09-20', '16:50:25', 300, 'on_time', 3);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 104, 'PVG', '2024-10-04', '13:25:25', 'BEI', '2024-10-04', '16:50:25', 300, 'on_time', 3);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 106, 'SFO', '2024-08-04', '13:25:25', 'LAX', '2024-08-04', '16:50:25', 350, 'delayed', 3);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 206, 'SFO', '2025-02-04', '13:25:25', 'LAX', '2025-02-04', '16:50:25', 300, 'on_time', 2);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 207, 'LAX', '2025-03-04', '13:25:25', 'SFO', '2025-03-04', '16:50:25', 300, 'on_time', 2);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 134, 'JFK', '2023-12-15', '13:25:25', 'BOS', '2023-12-15', '16:50:25', 300, 'delayed', 3);
+
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 296, 'PVG', '2024-12-30', '13:25:25', 'SFO', '2024-12-30', '16:50:25', 3000, 'on_time', 1);
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 715, 'PVG', '2024-09-28', '13:25:25', 'BEI', '2024-09-28', '16:50:25', 500, 'delayed', 1);
+
+INSERT INTO flight 
+(airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
+VALUES ('JetBlue', 839, 'SHEN', '2023-12-26', '13:25:25', 'BEI', '2023-12-26', '16:50:25', 300, 'on_time', 3);
 
