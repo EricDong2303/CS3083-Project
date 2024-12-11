@@ -369,7 +369,6 @@ def rateFlight():
     flight_number = ticket['flight_number']
     departure_date = ticket['departure_date']
     departure_time = ticket['departure_time']
-    name = query_customer_name()
     if (datetime.datetime.now().date() < departure_date):
         return render_template('homeCustomer.html', name=name, rating_error="You cannot review a flight before it has departed.")
     if (datetime.datetime.now().time() < departure_time and datetime.datetime.now().date() == departure_date):
@@ -380,8 +379,10 @@ def rateFlight():
         cursor.execute(review_post, (email, flight_number, airline_name, departure_date, departure_time, rating, comment))
         conn.commit()
         cursor.close()
+        name = query_customer_name()
         return render_template('homeCustomer.html', name=name, rating_message="Your review has been submitted!")
     except:
+        name = query_customer_name()
         return render_template('homeCustomer.html', name=name, rating_message="Please shorten the length of your review")
 
 
