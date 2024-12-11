@@ -733,7 +733,7 @@ def viewCustomer():
 def addEmail():
     email = request.form['added_email']
     username = session['username'];
-    query = "INSERT INTO staff_email VALUES (%s, %s)"
+    query = "INSERT INTO staff_email (%s, %s)"
     try:
         cursor.execute(query, (email, username))
         conn.commit()
@@ -747,7 +747,7 @@ def addEmail():
 def addPhone():
     phone = request.form['added_phone']
     username = session['username'];
-    query = "INSERT INTO staff_phone VALUES (%s, %s)"
+    query = "INSERT INTO staff_phone (%s, %s)"
     try:
         cursor.execute(query, (phone, username))
         conn.commit()
