@@ -17,7 +17,7 @@ CREATE TABLE customer(
 );
 
 CREATE TABLE customer_phone(
-	phone_number INT,
+	phone_number VARCHAR(100),
 	email VARCHAR(100),
 	PRIMARY KEY(phone_number, email),
 	FOREIGN KEY(email) REFERENCES customer(email)
