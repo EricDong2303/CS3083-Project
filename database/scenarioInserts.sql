@@ -169,38 +169,49 @@ VALUES ('20', 'JetBlue', 296, '2024-12-30', '13:25:25', 3000, 'credit', 11112222
 -- purchase
 
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '1');
+VALUES ('testcustomer@nyu.edu', '1');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user1@nyu.edu', '2');
+VALUES ('user1@nyu.edu', '2');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user2@nyu.edu', '3');
+VALUES ('user2@nyu.edu', '3');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user1@nyu.edu', '4');
+VALUES ('user1@nyu.edu', '4');
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '5');
+VALUES ('testcustomer@nyu.edu', '5');
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '6');
+VALUES ('testcustomer@nyu.edu', '6');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user3@nyu.edu', '7');
+VALUES ('user3@nyu.edu', '7');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user3@nyu.edu', '8');
+VALUES ('user3@nyu.edu', '8');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user3@nyu.edu', '9');
+VALUES ('user3@nyu.edu', '9');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user3@nyu.edu', '11');
+VALUES ('user3@nyu.edu', '11');
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '12');
+VALUES ('testcustomer@nyu.edu', '12');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user3@nyu.edu', '14');
+VALUES ('user3@nyu.edu', '14');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user1@nyu.edu', '15');
+VALUES ('user1@nyu.edu', '15');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user2@nyu.edu', '16');
+VALUES ('user2@nyu.edu', '16');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user1@nyu.edu', '17');
+VALUES ('user1@nyu.edu', '17');
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '18');
+VALUES ('testcustomer@nyu.edu', '18');
 INSERT INTO purchase (email, ticket_id)
-VALUES('user1@nyu.edu', '19');
+VALUES ('user1@nyu.edu', '19');
 INSERT INTO purchase (email, ticket_id)
-VALUES('testcustomer@nyu.edu', '20');
+VALUES ('testcustomer@nyu.edu', '20');
+
+INSERT INTO review (email, flight_number, airline_name, departure_date, departure_time, rating, comment)
+VALUES ('testcustomer@nyu.edu', 102, 'JetBlue', '2024-09-20', '13:25:25', 4, 'Very Comfortable');
+INSERT INTO review (email, flight_number, airline_name, departure_date, departure_time, rating, comment)
+VALUES ('user1@nyu.edu', 102, 'JetBlue', '2024-09-20', '13:25:25', 5, 'Relaxing, check-in and onboarding very professional');
+INSERT INTO review (email, flight_number, airline_name, departure_date, departure_time, rating, comment)
+VALUES ('user2@nyu.edu', 102, 'JetBlue', '2024-09-20', '13:25:25', 3, 'Satisfied and will use the same flight again');
+INSERT INTO review (email, flight_number, airline_name, departure_date, departure_time, rating, comment)
+VALUES ('testcustomer@nyu.edu', 104, 'JetBlue', '2024-10-04', '13:25:25', 1, 'Customer care services are not good');
+INSERT INTO review (email, flight_number, airline_name, departure_date, departure_time, rating, comment)
+VALUES ('user1@nyu.edu', 104, 'JetBlue', '2024-10-04', '13:25:25', 5, 'Comfortable journey and professional');
