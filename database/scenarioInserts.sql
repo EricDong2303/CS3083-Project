@@ -165,3 +165,42 @@ INSERT INTO ticket
 (ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
 VALUES ('20', 'JetBlue', 296, '2024-12-30', '13:25:25', 3000, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2023-12-17', '11:55:55', 'Jon', 'Snow', '1999-12-19');
 
+
+-- purchase
+
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '1');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user1@nyu.edu', '2');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user2@nyu.edu', '3');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user1@nyu.edu', '4');
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '5');
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '6');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user3@nyu.edu', '7');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user3@nyu.edu', '8');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user3@nyu.edu', '9');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user3@nyu.edu', '11');
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '12');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user3@nyu.edu', '14');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user1@nyu.edu', '15');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user2@nyu.edu', '16');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user1@nyu.edu', '17');
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '18');
+INSERT INTO purchase (email, ticket_id)
+VALUES('user1@nyu.edu', '19');
+INSERT INTO purchase (email, ticket_id)
+VALUES('testcustomer@nyu.edu', '20');
