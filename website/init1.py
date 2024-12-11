@@ -729,6 +729,33 @@ def viewCustomer():
     # display info on new page
     return render_template('viewCustomer.html', customer=customer, flights=flights)
 
+@app.route('/addEmail', methods=['POST'])
+def addEmail():
+    email = request.form['added_email']
+    username = session['username'];
+    query = "INSERT INTO staff_email VALUES (%s, %s)"
+    try:
+        cursor.execute(query, (email, username))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        return render_template('homeStaff.html', error="One or more fields in adding email were invalid. Please reenter your information.")
+
+
+@app.route('/addPhone', methods=['POST'])
+def addPhone():
+    phone = request.form['added_phone']
+    username = session['username'];
+    query = "INSERT INTO staff_phone VALUES (%s, %s)"
+    try:
+        cursor.execute(query, (phone, username))
+        conn.commit()
+        cursor.close()
+        return redirect(url_for('staffHome'))
+    except:
+        return render_template('homeStaff.html', error="One or more fields in adding phone were invalid. Please reenter your information.")
+
 
 # Route for airline staff to see the average rating and all comments given for a specific flight
 @app.route('/viewFlightRatings', methods=['POST'])

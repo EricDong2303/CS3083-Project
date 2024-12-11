@@ -44,7 +44,7 @@ CREATE TABLE airplane(
 	seats INT NOT NULL,
 	company VARCHAR(100) NOT NULL,
 	age INT AS (YEAR(CURDATE()) - YEAR(manufacture_date)),
-	model_number INT NOT NULL,
+	model_number VARCHAR(100) NOT NULL,
 	manufacture_date DATE NOT NULL,
 	PRIMARY KEY(id, airline_name),
 	FOREIGN KEY(airline_name) REFERENCES airline(name)
