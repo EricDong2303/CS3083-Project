@@ -78,7 +78,7 @@ CREATE TABLE ticket(
 	departure_time TIME NOT NULL,
 	ticket_price INT NOT NULL,
 	card_type VARCHAR(100) NOT NULL,
-	card_number INT NOT NULL,
+	card_number VARCHAR(100) NOT NULL,
 	name_on_card VARCHAR(100) NOT NULL,
 	card_exp DATE NOT NULL,
 	purchase_date DATE NOT NULL,

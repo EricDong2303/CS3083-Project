@@ -91,3 +91,77 @@ INSERT INTO flight
 (airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
 VALUES ('JetBlue', 839, 'SHEN', '2023-12-26', '13:25:25', 'BEI', '2023-12-26', '16:50:25', 300, 'on_time', 3);
 
+--tickets
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('1', 'JetBlue', 102, '2024-09-20', '13:25:25', 300, 'credit', 1111222233334444, 'Jon Snow', '2025-03-01', '2024-08-17', '11:15:55', 'Jon', 'Snow', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('2', 'JetBlue', 102, '2024-09-20', '13:25:25', 300, 'credit', 1111222233335555, 'Alice Bob', '2025-03-01', '2024-08-16', '11:55:55', 'Alice', 'Bob', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('3', 'JetBlue', 102, '2024-09-20', '13:25:25', 300, 'credit', 1111222233335555, 'Cathy Wood', '2025-03-01', '2024-09-14', '11:55:55', 'Cathy', 'Wood', '1999-10-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('4', 'JetBlue', 104, '2024-10-04', '13:25:25', 300, 'credit', 1111222233335555, 'Alice Bob', '2024-03-01', '2024-08-21', '11:55:55', 'Alice', 'Bob', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('5', 'JetBlue', 104, '2024-10-04', '13:25:25', 300, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2024-09-28', '11:55:55', 'Jon', 'Snow', '1999-12-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('6', 'JetBlue', 106, '2024-08-04', '13:25:25', 350, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2024-08-02', '11:55:55', 'Jon', 'Snow', '1999-12-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('7', 'JetBlue', 106, '2024-08-04', '13:25:25', 350, 'credit', 1111222233335555, 'Trudy Jones', '2024-03-01', '2024-07-23', '11:55:55', 'Trudy', 'Jones', '1999-09-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('8', 'JetBlue', 839, '2023-12-26', '13:25:25', 300, 'credit', 1111222233335555, 'Trudy Jones', '2024-03-01', '2023-12-23', '11:55:55', 'Trudy', 'Jones', '1999-09-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('9', 'JetBlue', 102, '2024-09-20', '13:25:25', 300, 'credit', 1111222233335555, 'Trudy Jones', '2024-03-01', '2024-07-14', '11:55:55', 'Trudy', 'Jones', '1999-09-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('11', 'JetBlue', 134, '2023-12-15', '13:25:25', 300, 'credit', 1111222233335555, 'Trudy Jones', '2024-03-01', '2024-10-23', '11:55:55', 'Trudy', 'Jones', '1999-09-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('12', 'JetBlue', 715, '2024-09-28', '13:25:25', 500, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2024-05-02', '11:55:55', 'Jon', 'Snow', '1999-12-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('14', 'JetBlue', 206, '2025-02-04', '13:25:25', 400, 'credit', 1111222233335555, 'Trudy Jones', '2024-03-01', '2024-11-20', '11:55:55', 'Trudy', 'Jones', '1999-09-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('15', 'JetBlue', 206, '2025-02-04', '13:25:25', 400, 'credit', 1111222233335555, 'Alice Bob', '2024-03-01', '2024-11-21', '11:55:55', 'Alice', 'Bob', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('16', 'JetBlue', 206, '2025-02-04', '13:25:25', 400, 'credit', 1111222233335555, 'Cathy Wood', '2024-03-01', '2024-09-19', '11:55:55', 'Cathy', 'Wood', '1999-10-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('17', 'JetBlue', 207, '2025-03-04', '13:25:25', 300, 'credit', 1111222233335555, 'Alice Bob', '2024-03-01', '2024-08-15', '11:55:55', 'Alice', 'Bob', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('18', 'JetBlue', 207, '2025-03-04', '13:25:25', 300, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2024-09-25', '11:55:55', 'Jon', 'Snow', '1999-12-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('19', 'JetBlue', 296, '2024-12-30', '13:25:25', 3000, 'credit', 1111222233334444, 'Alice Bob', '2024-03-01', '2024-11-22', '11:55:55', 'Alice', 'Bob', '1999-11-19');
+
+INSERT INTO ticket
+(ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
+VALUES ('20', 'JetBlue', 296, '2024-12-30', '13:25:25', 3000, 'credit', 1111222233334444, 'Jon Snow', '2024-03-01', '2023-12-17', '11:55:55', 'Jon', 'Snow', '1999-12-19');
+
