@@ -91,7 +91,7 @@ INSERT INTO flight
 (airline_name, flight_number, departure_code, departure_date, departure_time, arrival_code, arrival_date, arrival_time, base_price, flight_status, airplane_id) 
 VALUES ('JetBlue', 839, 'SHEN', '2023-12-26', '13:25:25', 'BEI', '2023-12-26', '16:50:25', 300, 'on_time', 3);
 
---tickets
+-- tickets
 
 INSERT INTO ticket
 (ticket_id, airline_name, flight_number, departure_date, departure_time, ticket_price, card_type, card_number, name_on_card, card_exp, purchase_date, purchase_time, first_name, last_name, dob)
